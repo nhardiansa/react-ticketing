@@ -33,7 +33,7 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
         };
 
         fetchSelectedSeats();
-    }, [setSelectedSeats, setBookedSeats]);
+    }, [setSelectedSeats, setBookedSeats, selectedShow]);
 
     const toggleSelectShow = async (show: string) => {
         setSelectedShow(show);
@@ -71,24 +71,27 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
             const res = await upsertSeats(formData);
             toast.success('Successfully booking seats');
             res.forEach((seat) => {
-
-                setBookedSeats((prev) => {
-                    const existingIndex = bookedSeats.findIndex((s) => s.id === seat.id);
-                    let newSeats = [...prev];
-                    if (existingIndex !== -1) {
-                        newSeats[existingIndex] = seat;
-                    } else {
-                        newSeats = [...prev, seat];
-                    }
-
-                    return newSeats;
-                });
+                upsertSeatFromBookedSeat(seat);
             });
             setSelectedSeats([]);
         } catch (err) {
             toast.error(`Failed to booking seats: ${err}`);
         }
     };
+
+    const upsertSeatFromBookedSeat = (seat: BookedSeat) => {
+        setBookedSeats((prev) => {
+            const existingIndex = bookedSeats.findIndex((s) => s.id === seat.id);
+            let newSeats = [...prev];
+            if (existingIndex !== -1) {
+                newSeats[existingIndex] = seat;
+            } else {
+                newSeats = [...prev, seat];
+            }
+
+            return newSeats;
+        });
+    }
 
     return (
         <BookedSeatsContext.Provider
@@ -102,6 +105,7 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
                 bookedSeats,
                 setBookedSeats,
                 claimBookingSeats,
+                upsertSeatFromBookedSeat,
             }}
         >
             {children}

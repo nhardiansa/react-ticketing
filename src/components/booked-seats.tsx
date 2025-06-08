@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { useVirtualizer, type VirtualItem } from '@tanstack/react-virtual'
 import { useBookedSeats } from '@/context/BookedSeatsContext';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 interface BookedSeatsProps {
     rows: number;
@@ -13,78 +13,65 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
     cols,
     seatSize = 50,
 }) => {
-
-    const parentRef = React.useRef<HTMLDivElement | null>(null)
     const { seats, selectedSeats, bookedSeats, toggleSeat } = useBookedSeats();
 
-    const rowVirtualizer = useVirtualizer({
-        count: rows,
-        getScrollElement: () => parentRef.current,
-        estimateSize: () => seatSize,
-        overscan: 5,
-    })
-
-    const columnVirtualizer = useVirtualizer({
-        horizontal: true,
-        count: cols,
-        getScrollElement: () => parentRef.current,
-        estimateSize: () => seatSize,
-        overscan: 5,
-    })
-
     return (
-        <>
-            <div
-                ref={parentRef}
-                className="h-180 w-full overflow-auto"
+        <div
+            className="w-screen h-[80vh] overflow-auto relative"
+        >
+            <TransformWrapper
+                minScale={0.1}
+                initialScale={0.25}
+                wheel={{ step: 0.05 }}
+                doubleClick={{ disabled: true }}
             >
-                <div
-                    className="relative"
-                    style={{
-                        height: `${rowVirtualizer.getTotalSize()}px`,
-                        width: `${columnVirtualizer.getTotalSize()}px`,
-                    }}
-                >
-                    {rowVirtualizer.getVirtualItems().map((virtualRow: VirtualItem) => (
-                        <React.Fragment key={virtualRow.key}>
-                            {columnVirtualizer.getVirtualItems().map((virtualColumn: VirtualItem) => {
-                                const rowIndex = virtualRow.index;
-                                const colIndex = virtualColumn.index;
+                <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
+
+                    <div
+                        style={{
+                            width: cols * seatSize,
+                            height: rows * seatSize,
+                            position: "relative",
+                        }}
+                    >
+                        {[...Array(rows)].flatMap((_, rowIndex) =>
+                            [...Array(cols)].map((_, colIndex) => {
+                                const index = rowIndex * cols + colIndex;
                                 const key = `${rowIndex}-${colIndex}`;
                                 const seatData = seats.find((s) => s.id === key);
-                                const isSelected = Boolean(selectedSeats.find((s) => s.id === key));
+                                const isSelectedSeat = Boolean(selectedSeats.find((s) => s.id === key));
                                 const isBooked = Boolean(bookedSeats.find((s) => s.seat_id === key));
                                 return (
                                     <div
-                                        key={virtualColumn.key}
-                                        className={`absolute flex items-center justify-center text-sm ${seatData ? "border cursor-pointer hover:bg-gray-50" : ""} bg-transparent`}
+                                        key={index}
                                         style={{
-                                            top: 0,
-                                            left: 0,
-                                            width: `${virtualColumn.size}px`,
-                                            height: `${virtualRow.size}px`,
-                                            transform: `translateX(${virtualColumn.start}px) translateY(${virtualRow.start}px)`,
-                                            backgroundColor: isBooked ? "black" : isSelected ? "orangered" : seatData?.color ?? undefined,
+                                            position: "absolute",
+                                            top: rowIndex * seatSize,
+                                            left: colIndex * seatSize,
+                                            width: seatSize - 2,
+                                            height: seatSize - 2,
+                                            backgroundColor: isBooked ? "black" : isSelectedSeat? 'orangered': seatData ? seatData.color : "white",
+                                            border: "1px solid white",
+                                            boxSizing: "border-box",
+                                            fontSize: 10,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            color: "white",
                                         }}
                                         onClick={isBooked ? undefined : seatData ? () => {
                                             toggleSeat(key, seatData);
                                         } : undefined}
                                     >
-
-                                        {
-                                            isBooked?<p className='text-white text-xs'>Booked</p>:seatData ? <div className="flex flex-col text-white">
-                                                <p className="text-xs">{seatData.name}</p>
-                                            </div> : <></>
-                                        }
+                                        {isBooked ? 'Booked' : seatData?.name}
                                     </div>
-                                )
-                            })}
-                        </React.Fragment>
-                    ))}
-                </div>
-            </div>
-
-        </>
+                                );
+                            })
+                        )}
+                    </div>
+                </TransformComponent>
+            </TransformWrapper>
+        </div>
     )
 }
 

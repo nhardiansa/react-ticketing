@@ -13,6 +13,7 @@ export type BookedSeatsContextType = {
     claimBookingSeats: (name:string, ticket_id:string) => void;
     toggleSeat: (id: string, seat:Seat) => void;
     toggleSelectShow: (show:string) => void;
+    upsertSeatFromBookedSeat: (seat:BookedSeat) => void;
 };
 
 export const BookedSeatsContext = createContext<BookedSeatsContextType | undefined>(undefined);

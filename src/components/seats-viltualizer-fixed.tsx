@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { useVirtualizer, type VirtualItem } from '@tanstack/react-virtual'
 import { useSeats } from '@/context/SeatsContext';
 import { FormSeatDialog } from './dialog/form-seat-dialog';
 import { useState } from 'react';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 interface SeatVirtualizerFixedProps {
     rows: number;
@@ -16,27 +16,72 @@ export const SeatVirtualizerFixed: React.FC<SeatVirtualizerFixedProps> = ({
     seatSize = 50,
 }) => {
     const [openDialog, setOpenDialog] = useState(false);
-    const parentRef = React.useRef<HTMLDivElement | null>(null)
     const { selectedSeats, setSeatConfig } = useSeats();
-
-    const rowVirtualizer = useVirtualizer({
-        count: rows,
-        getScrollElement: () => parentRef.current,
-        estimateSize: () => seatSize,
-        overscan: 5,
-    })
-
-    const columnVirtualizer = useVirtualizer({
-        horizontal: true,
-        count: cols,
-        getScrollElement: () => parentRef.current,
-        estimateSize: () => seatSize,
-        overscan: 5,
-    })
 
     return (
         <>
             <div
+                className="w-screen h-[80vh] overflow-auto relative"
+            >
+                <TransformWrapper
+                    minScale={0.1}
+                    initialScale={0.25}
+                    wheel={{ step: 0.05 }}
+                    doubleClick={{ disabled: true }}
+                >
+                    <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
+
+                        <div
+                            style={{
+                                width: cols * seatSize,
+                                height: rows * seatSize,
+                                position: "relative",
+                            }}
+                        >
+                            {[...Array(rows)].flatMap((_, rowIndex) =>
+                                [...Array(cols)].map((_, colIndex) => {
+                                    const index = rowIndex * cols + colIndex;
+                                    const key = `${rowIndex}-${colIndex}`;
+                                    const seatData = selectedSeats.find((s) => s.id === key);
+
+                                    return (
+                                        <div
+                                            key={index}
+                                            className={`absolute cursor-pointer flex items-center justify-center text-sm border bg-white hover:bg-gray-50`}
+                                            style={{
+                                                position: "absolute",
+                                                top: rowIndex * seatSize,
+                                                left: colIndex * seatSize,
+                                                width: seatSize - 2,
+                                                height: seatSize - 2,
+                                                backgroundColor: seatData ? seatData.color : "white",
+                                                boxSizing: "border-box",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                color: "white",
+                                            }}
+                                            onClick={seatData ? () => {
+                                                if (seatData) {
+                                                    setSeatConfig(seatData);
+                                                    setOpenDialog(true);
+                                                }
+                                            } : undefined}
+                                        >
+                                            <div className="flex flex-col justify-center items-center">
+                                                <p>{seatData?.name}</p>
+                                                <p>{seatData?.category}</p>
+                                            </div>
+
+                                        </div>
+                                    );
+                                })
+                            )}
+                        </div>
+                    </TransformComponent>
+                </TransformWrapper>
+            </div>
+            {/* <div
                 ref={parentRef}
                 className="h-180 w-full overflow-auto"
             >
@@ -85,7 +130,7 @@ export const SeatVirtualizerFixed: React.FC<SeatVirtualizerFixedProps> = ({
                         </React.Fragment>
                     ))}
                 </div>
-            </div>
+            </div> */}
             <FormSeatDialog isOpen={openDialog} onOpenChange={setOpenDialog} />
         </>
     )

@@ -1,10 +1,10 @@
 import axios from './axios';
 import type { BookedSeat } from '@/types/booked-seat';
 
-export const findBookedSeats = async (show?: string): Promise<BookedSeat[]> => {
+export const findBookedSeats = async (show_id?: string): Promise<BookedSeat[]> => {
     const res = await axios.get("/api/booked-seats", {
         params: {
-            show
+            show_id
         }
     },
     );
