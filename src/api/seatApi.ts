@@ -7,13 +7,13 @@ export const findSeats = async (): Promise<Seat[]> => {
 };
 
 export const postSeat = async (seat: Seat): Promise<void> => {
-  await admin_api.post("/api/seats", seat);
+  await admin_api.post("/admin_api/seats", seat);
 };
 
 export const deleteSeat = async (id: string): Promise<void> => {
-  await admin_api.delete(`/api/seats/${encodeURIComponent(id)}`);
+  await admin_api.delete(`/admin_api/seats/${encodeURIComponent(id)}`);
 };
 
 export const putSeat = async (id: string, seat: Seat): Promise<void> => {
-  await admin_api.put(`/api/seats/${encodeURIComponent(id)}`, seat);
+  await admin_api.put(`/admin_api/seats/${encodeURIComponent(id)}`, seat);
 };

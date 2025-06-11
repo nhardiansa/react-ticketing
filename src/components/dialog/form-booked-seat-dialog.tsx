@@ -20,7 +20,7 @@ interface FormBookedSeatDialogProps {
 
 export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDialogProps) {
     const [data, setData] = useState<{ name: string, ticket_id: string }>({ name: "", ticket_id: "" });
-    const { selectedSeats, claimBookingSeats } = useBookedSeats();
+    const { seats,authSelectedSeats, claimBookingSeats } = useBookedSeats();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -45,8 +45,9 @@ export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDia
                 </DialogHeader>
                 <div className="grid gap-4">
                     <div className="mt-4 grid gap-2 grid-cols-6">
-                        {selectedSeats.map((seat) => {
-                            return <Badge key={seat.id} variant="outline" className="text-white font-bold uppercase" style={{ backgroundColor: seat.color }}>{seat.name}</Badge>
+                        {authSelectedSeats.map((locked) => {
+                            const seat = seats.find((s)=>s.id === locked.seat_id);
+                            return <Badge key={locked.seat_id} variant="outline" className="text-white font-bold uppercase" style={{ backgroundColor: seat?.color }}>{seat?.name}</Badge>
                         })}
                     </div>
                     <div className="grid gap-3">

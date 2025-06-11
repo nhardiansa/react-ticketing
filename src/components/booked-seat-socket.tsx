@@ -1,5 +1,4 @@
 import { useBookedSeats } from "@/context/BookedSeatsContext";
-import type { BookedSeat } from "@/types/booked-seat";
 import type { SocketMessage } from "@/types/socket-message";
 import { useEffect, useRef } from "react";
 
@@ -11,7 +10,7 @@ export default function BookedSeatsSocket({ children }: BookedSeatsSocketProps) 
     const baseUrl = import.meta.env.VITE_WS_BASE_URL || 'ws://127.0.0.1:3000'; 
     const url =`${baseUrl}/ws`;
     const ws = useRef<WebSocket | null>(null);
-    const {upsertSeatFromBookedSeat} = useBookedSeats();
+    const {upsertSeatFromBookedSeat, upsertSelectedSeats} = useBookedSeats();
 
     useEffect(() => {
         ws.current = new WebSocket(url);
@@ -22,10 +21,13 @@ export default function BookedSeatsSocket({ children }: BookedSeatsSocketProps) 
 
         ws.current.onmessage = (event) => {
             try {
-                console.log(event);
-                const data: SocketMessage<BookedSeat>  = JSON.parse(event.data);
-                // Run updated bookedSeats
-                upsertSeatFromBookedSeat(data.message)
+                const data: SocketMessage  = JSON.parse(event.data);
+                if(data.type == "booked_seat"){
+                    upsertSeatFromBookedSeat(data.message);
+                }
+                if(data.type == "seat_locked" || data.type == "seat_unlocked"){
+                    upsertSelectedSeats(data.type ,data.message);
+                }
             } catch (err) {
                 console.error('Error parsing WebSocket message:', err);
             }
@@ -42,7 +44,7 @@ export default function BookedSeatsSocket({ children }: BookedSeatsSocketProps) 
         return () => {
             ws.current?.close();
         };
-    }, [url, upsertSeatFromBookedSeat]);
+    }, [url, upsertSeatFromBookedSeat, upsertSelectedSeats]);
 
     return (
         <>

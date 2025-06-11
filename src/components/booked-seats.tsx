@@ -13,7 +13,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
     cols,
     seatSize = 50,
 }) => {
-    const { seats, selectedSeats, bookedSeats, toggleSeat } = useBookedSeats();
+    const { seats, authSelectedSeats, anotherAuthSelectedSeats, bookedSeats, toggleSeat } = useBookedSeats();
 
     return (
         <div
@@ -39,7 +39,8 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                 const index = rowIndex * cols + colIndex;
                                 const key = `${rowIndex}-${colIndex}`;
                                 const seatData = seats.find((s) => s.id === key);
-                                const isSelectedSeat = Boolean(selectedSeats.find((s) => s.id === key));
+                                const isSelectedSeat = Boolean(authSelectedSeats.find((s) => s.seat_id === key));
+                                const isLocked = Boolean(anotherAuthSelectedSeats.find((s) => s.seat_id === key));
                                 const isBooked = Boolean(bookedSeats.find((s) => s.seat_id === key));
                                 return (
                                     <div
@@ -50,7 +51,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             left: colIndex * seatSize,
                                             width: seatSize - 2,
                                             height: seatSize - 2,
-                                            backgroundColor: isBooked ? "black" : isSelectedSeat? 'orangered': seatData ? seatData.color : "white",
+                                            backgroundColor: isBooked || isLocked ? "black" : isSelectedSeat ? 'orangered' : seatData ? seatData.color : "white",
                                             border: "1px solid white",
                                             boxSizing: "border-box",
                                             fontSize: 10,
@@ -63,7 +64,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             toggleSeat(key, seatData);
                                         } : undefined}
                                     >
-                                        {isBooked ? 'Booked' : seatData?.name}
+                                        {isBooked ? 'Booked' : isLocked ? 'Locked' : seatData?.name}
                                     </div>
                                 );
                             })

@@ -16,7 +16,7 @@ export const login = async (email:string, password:string): Promise<User> => {
     const user = res.data.data;
     if(token && user){
         localStorage.setItem('token',token);
-        localStorage.setItem('user',user);
+        localStorage.setItem('user',JSON.stringify(user));
     }
     console.log("USER",user);
      // Atau dari Redux/Context

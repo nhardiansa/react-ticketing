@@ -1,17 +1,20 @@
 // context/BookedSeatsProvider.tsx
 import React, { useEffect, useState } from 'react';
-import type { Seat } from '@/types/seat';
+import type { Seat, SeatLocked } from '@/types/seat';
 import { toast } from 'sonner';
 import { BookedSeatsContext } from './BookedSeatsContext';
 import type { BookedSeat } from '@/types/booked-seat';
-import { findBookedSeats, upsertSeats } from '@/api/booked-seat-api';
+import { findBookedSeats, getSeatsLocked, lockSeat, upsertSeats } from '@/api/booked-seat-api';
 import { findSeats } from '@/api/seatApi';
+import { useAuth } from './AuthContext';
 
 export const BookedSeatsProvider = ({ children }: { children: React.ReactNode }) => {
+    const { user } = useAuth();
     const [seats, setSeats] = useState<Seat[]>([]);
     const [selectedShow, setSelectedShow] = useState<string>("reconnect");
-    const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
-
+    const [selectedSeats, setSelectedSeats] = useState<SeatLocked[]>([]);
+    const authSelectedSeats = selectedSeats.filter((s) => s.admin_id === user?.id);
+    const anotherAuthSelectedSeats = selectedSeats.filter((s) => s.admin_id !== user?.id);
     const [bookedSeats, setBookedSeats] = useState<BookedSeat[]>([]);
 
 
@@ -24,6 +27,10 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
                     setSeats(seats);
                     const bookedSeats = await findBookedSeats(selectedShow);
                     setBookedSeats(bookedSeats);
+                    getSeatsLocked(selectedShow).then((res) => {
+
+                        setSelectedSeats(res);
+                    })
                 } catch (err) {
                     toast.error(`Failed to fetch selected seats: ${err}`);
                 }
@@ -39,31 +46,48 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
         setSelectedShow(show);
         const seats = await findBookedSeats();
         setBookedSeats(seats);
-        setSelectedSeats([]);
+        getSeatsLocked(selectedShow).then((res) => {
+            setSelectedSeats(res);
+        })
     };
 
-    const toggleSeat = (id: string, seat: Seat) => {
-        setSelectedSeats((prev) => {
-            const exists = prev.find((s) => s.id === id);
-            let newSeats: Seat[];
-
-            if (exists) {
-                newSeats = prev.filter((s) => s.id !== id);
-            } else {
-                const newSeat: Seat = { ...seat, id };
-                newSeats = [...prev, newSeat];
-            }
-
-            return newSeats;
+    const toggleSeat = (id: string) => {
+        const newSeat: SeatLocked = { seat_id: id, admin_id: user?.id, show_id: selectedShow };
+        toast.promise(lockSeat(newSeat), {
+            loading: 'Lock Seat Loading...',
+            success: (data) => {
+                console.log("Locked", data);
+                if (data.status == "locked") {
+                    setSelectedSeats([...selectedSeats, data.data]);
+                    return `Seat has been ${data.status}`;
+                } if (data.status == "unlocked") {
+                    setSelectedSeats((prev) => {
+                        const exists = prev.find((s) => s.seat_id === id);
+                        let newSeats: SeatLocked[] = prev;
+                        if (exists) {
+                            newSeats = prev.filter((s) => s.seat_id !== id);
+                        }
+                        return newSeats;
+                    });
+                    return `Seat has been ${data.status}`;
+                }
+                return `Seat has been ${data.status}`;
+            },
+            error: (err) => {
+            // optional: custom error handling
+            return err?.message || 'Error locking seat';
+        },
         });
     };
 
     const claimBookingSeats = async (name?: string, ticket_id?: string) => {
         try {
-            const formData: BookedSeat[] = selectedSeats.map((seat) => ({
-                id: `${selectedShow}-${seat.id}`,
+
+            const formData: BookedSeat[] = authSelectedSeats.map((seat) => ({
+                id: `${selectedShow}-${seat.seat_id}`,
                 show_id: selectedShow,
-                seat_id: seat.id,
+                seat_id: seat.seat_id,
+                admin_id: seat.admin_id,
                 name: name || '',
                 ticket_id: ticket_id || '',
             }));
@@ -93,11 +117,28 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
         });
     }
 
+    const upsertSelectedSeats = (type: string, seat: SeatLocked) => {
+        if (type === "seat_locked") {
+            setSelectedSeats([...selectedSeats, seat]);
+        } if (type === "seat_unlocked") {
+            setSelectedSeats((prev) => {
+                const exists = prev.find((s) => s.seat_id === seat.seat_id);
+                let newSeats: SeatLocked[] = prev;
+                if (exists) {
+                    newSeats = prev.filter((s) => s.seat_id !== seat.seat_id);
+                }
+                return newSeats;
+            });
+        }
+    }
+
     return (
         <BookedSeatsContext.Provider
             value={{
                 seats,
                 selectedSeats,
+                authSelectedSeats,
+                anotherAuthSelectedSeats,
                 setSelectedSeats,
                 selectedShow,
                 toggleSelectShow,
@@ -106,6 +147,7 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
                 setBookedSeats,
                 claimBookingSeats,
                 upsertSeatFromBookedSeat,
+                upsertSelectedSeats,
             }}
         >
             {children}

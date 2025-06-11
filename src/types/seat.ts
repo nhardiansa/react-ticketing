@@ -4,3 +4,14 @@ export type Seat = {
     category: string;
     color: string;
 };
+
+export type SeatLocked = {
+    seat_id?: string;
+    admin_id?: string;
+    show_id?:string;
+};
+
+export type ResSeatLocked = {
+    status: string,
+    data:SeatLocked,
+}
