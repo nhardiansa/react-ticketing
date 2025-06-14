@@ -7,15 +7,20 @@ import type { BookedSeat } from '@/types/booked-seat';
 import { findBookedSeats, getSeatsLocked, lockSeat, upsertSeats } from '@/api/booked-seat-api';
 import { findSeats } from '@/api/seatApi';
 import { useAuth } from './AuthContext';
+import type { Ticket } from '@/types/ticket';
+import { findTicketsByID } from '@/api/ticket-api';
 
 export const BookedSeatsProvider = ({ children }: { children: React.ReactNode }) => {
     const { user } = useAuth();
     const [seats, setSeats] = useState<Seat[]>([]);
     const [selectedShow, setSelectedShow] = useState<string>("reconnect");
-    const [selectedSeats, setSelectedSeats] = useState<SeatLocked[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<string>("all");
+    const [selectedSeats, setSelectedSeats] = useState<BookedSeat[]>([]);
     const authSelectedSeats = selectedSeats.filter((s) => s.admin_id === user?.id);
     const anotherAuthSelectedSeats = selectedSeats.filter((s) => s.admin_id !== user?.id);
     const [bookedSeats, setBookedSeats] = useState<BookedSeat[]>([]);
+    const [tickets, setTickets] = useState<Ticket[]>([]);
+    const seatCategories = Array.from(new Set(seats.map(seat => seat.category)));
 
 
     // Fetch selected seats from backend
@@ -51,6 +56,10 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
         })
     };
 
+    const toggleSelectCategory = async (category: string) => {
+        setSelectedCategory(category);
+    };
+
     const toggleSeat = (id: string) => {
         const newSeat: SeatLocked = { seat_id: id, admin_id: user?.id, show_id: selectedShow };
         toast.promise(lockSeat(newSeat), {
@@ -74,30 +83,27 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
                 return `Seat has been ${data.status}`;
             },
             error: (err) => {
-            // optional: custom error handling
-            return err?.message || 'Error locking seat';
-        },
+                // optional: custom error handling
+                return err?.message || 'Error locking seat';
+            },
         });
     };
 
-    const claimBookingSeats = async (name?: string, ticket_id?: string) => {
+    const claimBookingSeats = async () => {
         try {
-
-            const formData: BookedSeat[] = authSelectedSeats.map((seat) => ({
-                id: `${selectedShow}-${seat.seat_id}`,
-                show_id: selectedShow,
-                seat_id: seat.seat_id,
-                admin_id: seat.admin_id,
-                name: name || '',
-                ticket_id: ticket_id || '',
-            }));
-
-            const res = await upsertSeats(formData);
+            const res = await upsertSeats(authSelectedSeats);
             toast.success('Successfully booking seats');
             res.forEach((seat) => {
                 upsertSeatFromBookedSeat(seat);
+                setSelectedSeats((prev) => {
+                    const exists = prev.find((s) => s.seat_id === seat.seat_id);
+                    let newSeats: SeatLocked[] = prev;
+                    if (exists) {
+                        newSeats = prev.filter((s) => s.seat_id !== seat.seat_id);
+                    }
+                    return newSeats;
+                });
             });
-            setSelectedSeats([]);
         } catch (err) {
             toast.error(`Failed to booking seats: ${err}`);
         }
@@ -117,19 +123,48 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
         });
     }
 
-    const upsertSelectedSeats = (type: string, seat: SeatLocked) => {
-        if (type === "seat_locked") {
-            setSelectedSeats([...selectedSeats, seat]);
-        } if (type === "seat_unlocked") {
-            setSelectedSeats((prev) => {
-                const exists = prev.find((s) => s.seat_id === seat.seat_id);
-                let newSeats: SeatLocked[] = prev;
-                if (exists) {
-                    newSeats = prev.filter((s) => s.seat_id !== seat.seat_id);
-                }
-                return newSeats;
-            });
+    const upsertSelectedSeats = (type: string, seat: BookedSeat) => {
+        if (seat.show_id === selectedShow) {
+            if (type === "seat_locked") {
+                setSelectedSeats([...selectedSeats, seat]);
+            } if (type === "seat_unlocked") {
+                setSelectedSeats((prev) => {
+                    const exists = prev.find((s) => s.seat_id === seat.seat_id);
+                    let newSeats: SeatLocked[] = prev;
+                    if (exists) {
+                        newSeats = prev.filter((s) => s.seat_id !== seat.seat_id);
+                    }
+                    return newSeats;
+                });
+            }
         }
+    }
+
+    const searchTicketsByID = async (id: string) => {
+        const tickets = await findTicketsByID(id);
+        setTickets(tickets);
+    }
+
+    const handleSelectedTicket = (ticket: Ticket, seat: Seat) => {
+        setSelectedSeats((prev) => {
+            const index = prev.findIndex((s) => s.seat_id === seat.id)
+            const exists = prev.find((s) => s.seat_id === seat.id);
+
+            if (index !== -1 && exists) {
+                const updated = [...prev]
+                updated[index] = {
+                    id: `${selectedShow}-${seat.id}`,
+                    show_id: selectedShow,
+                    seat_id: seat.id,
+                    admin_id: user?.id,
+                    name: ticket.name,
+                    ticket_id: ticket.id,
+                };
+
+                return updated
+            }
+            return prev;
+        });
     }
 
     return (
@@ -148,6 +183,13 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
                 claimBookingSeats,
                 upsertSeatFromBookedSeat,
                 upsertSelectedSeats,
+                tickets,
+                setTickets,
+                searchTicketsByID,
+                handleSelectedTicket,
+                selectedCategory,
+                toggleSelectCategory,
+                seatCategories,
             }}
         >
             {children}

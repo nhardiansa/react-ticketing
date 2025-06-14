@@ -14,6 +14,7 @@ import { useState } from "react"
 import { FormBookedSeatDialog } from "../dialog/form-booked-seat-dialog"
 import { SelecShow } from "../select-show"
 import BookedSeatsSocket from "../booked-seat-socket"
+import { SelecCategory } from "../select-category"
 
 export default function BookedSeatsPage() {
     const [openDialog, setOpenDialog] = useState(false);
@@ -35,6 +36,7 @@ export default function BookedSeatsPage() {
                             <div className="flex flex-col">
                                 <div className="flex flex-row gap-2 m-4">
                                     <SelecShow />
+                                    <SelecCategory/>
                                     <Button onClick={() => {
                                         setOpenDialog(true);
                                     }}>

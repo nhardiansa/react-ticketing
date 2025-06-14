@@ -13,7 +13,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
     cols,
     seatSize = 50,
 }) => {
-    const { seats, authSelectedSeats, anotherAuthSelectedSeats, bookedSeats, toggleSeat } = useBookedSeats();
+    const { seats, authSelectedSeats, anotherAuthSelectedSeats, bookedSeats, toggleSeat, selectedCategory } = useBookedSeats();
 
     return (
         <div
@@ -42,6 +42,27 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                 const isSelectedSeat = Boolean(authSelectedSeats.find((s) => s.seat_id === key));
                                 const isLocked = Boolean(anotherAuthSelectedSeats.find((s) => s.seat_id === key));
                                 const isBooked = Boolean(bookedSeats.find((s) => s.seat_id === key));
+                                if (seatData?.category != selectedCategory && selectedCategory != "all" && seatData?.category != "STAGE") {
+                                    return (<div
+                                        key={index}
+                                        style={{
+                                            position: "absolute",
+                                            top: rowIndex * seatSize,
+                                            left: colIndex * seatSize,
+                                            width: seatSize - 2,
+                                            height: seatSize - 2,
+                                            backgroundColor: "white",
+                                            border: "1px solid white",
+                                            boxSizing: "border-box",
+                                            fontSize: 10,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            color: "white",
+                                        }}
+                                    >
+                                    </div>);
+                                }
                                 return (
                                     <div
                                         key={index}
@@ -52,7 +73,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             width: seatSize - 2,
                                             height: seatSize - 2,
                                             backgroundColor: isBooked || isLocked ? "black" : isSelectedSeat ? 'orangered' : seatData ? seatData.color : "white",
-                                            border: "1px solid white",
+                                            border: isSelectedSeat?"3px solid black":"1px solid white",
                                             boxSizing: "border-box",
                                             fontSize: 10,
                                             display: "flex",
