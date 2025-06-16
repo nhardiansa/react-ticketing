@@ -25,6 +25,8 @@ export type BookedSeatsContextType = {
     selectedCategory: string;
     toggleSelectCategory: (category: string) => void;
     seatCategories: string[];
+    bookedSeat: BookedSeat | null;
+    setBookedSeat: React.Dispatch<React.SetStateAction<BookedSeat|null>>;
 };
 
 export const BookedSeatsContext = createContext<BookedSeatsContextType | undefined>(undefined);

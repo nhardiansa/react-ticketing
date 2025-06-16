@@ -11,10 +11,10 @@ import { Button } from "../ui/button"
 import { IconShoppingCart } from "@tabler/icons-react"
 import CartSeats from "../cart-seats"
 import { useState } from "react"
-import { FormBookedSeatDialog } from "../dialog/form-booked-seat-dialog"
 import { SelecShow } from "../select-show"
 import BookedSeatsSocket from "../booked-seat-socket"
 import { SelecCategory } from "../select-category"
+import { FormCheckoutSeatDialog } from "../dialog/form-checkout-seat-dialog"
 
 export default function BookedSeatsPage() {
     const [openDialog, setOpenDialog] = useState(false);
@@ -50,7 +50,7 @@ export default function BookedSeatsPage() {
                                 </BookedSeatsSocket>
                             </div>
                         </div>
-                        <FormBookedSeatDialog isOpen={openDialog} onOpenChange={setOpenDialog} />
+                        <FormCheckoutSeatDialog isOpen={openDialog} onOpenChange={setOpenDialog} />
                     </div>
                 </SidebarInset>
             </BookedSeatsProvider>

@@ -10,10 +10,12 @@ export const findTicket = async (): Promise<BookedSeat[]> => {
     return res.data.data as BookedSeat[];
 };
 
-export const findTicketsByID = async (id?: string): Promise<BookedSeat[]> => {
+export const findTicketsByID = async (search?: string, page?:number, per_page?:number): Promise<BookedSeat[]> => {
     const res = await admin_api.get("/admin_api/tickets", {
         params: {
-            id
+            search,
+            "page":page??1,
+            "per_page":per_page??3,
         }
     },
     );

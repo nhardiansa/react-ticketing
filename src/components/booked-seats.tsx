@@ -1,6 +1,8 @@
-import * as React from 'react'
+
 import { useBookedSeats } from '@/context/BookedSeatsContext';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
+import { FormBookedSeatDialog } from './dialog/form-booked-seat-dialog';
+import { useState } from 'react';
 
 interface BookedSeatsProps {
     rows: number;
@@ -13,8 +15,12 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
     cols,
     seatSize = 50,
 }) => {
-    const { seats, authSelectedSeats, anotherAuthSelectedSeats, bookedSeats, toggleSeat, selectedCategory } = useBookedSeats();
-
+    const {
+        seats, authSelectedSeats,
+        anotherAuthSelectedSeats, bookedSeats, toggleSeat,
+        selectedCategory, setBookedSeat,
+    } = useBookedSeats();
+    const [openDialog, setOpenDialog] = useState(false);
     return (
         <div
             className="w-screen h-[80vh] overflow-auto relative"
@@ -51,7 +57,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             left: colIndex * seatSize,
                                             width: seatSize - 2,
                                             height: seatSize - 2,
-                                            backgroundColor: "white",
+                                            backgroundColor: seatData ? "grey" : "white",
                                             border: "1px solid white",
                                             boxSizing: "border-box",
                                             fontSize: 10,
@@ -73,7 +79,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             width: seatSize - 2,
                                             height: seatSize - 2,
                                             backgroundColor: isBooked || isLocked ? "black" : isSelectedSeat ? 'orangered' : seatData ? seatData.color : "white",
-                                            border: isSelectedSeat?"3px solid black":"1px solid white",
+                                            border: isSelectedSeat ? "3px solid black" : "1px solid white",
                                             boxSizing: "border-box",
                                             fontSize: 10,
                                             display: "flex",
@@ -81,7 +87,13 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             justifyContent: "center",
                                             color: "white",
                                         }}
-                                        onClick={isBooked ? undefined : seatData ? () => {
+                                        onClick={seatData?.category == "STAGE" ? undefined : isBooked ? () => {
+                                            const data = bookedSeats.find((s) => s.seat_id === key);
+                                            if (data) {
+                                                setBookedSeat(data);
+                                                setOpenDialog(true);
+                                            }
+                                        } : seatData ? () => {
                                             toggleSeat(key, seatData);
                                         } : undefined}
                                     >
@@ -93,6 +105,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                     </div>
                 </TransformComponent>
             </TransformWrapper>
+            <FormBookedSeatDialog isOpen={openDialog} onOpenChange={setOpenDialog} />
         </div>
     )
 }

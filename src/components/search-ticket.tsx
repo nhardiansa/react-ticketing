@@ -35,7 +35,7 @@ export function SearchTicket({ seat }: SearchTicketProps) {
                     {selected ? <div className="flex flex-row text-sm gap-2">
                         <div>{selected.id}</div>
                         <div>{selected.name}</div>
-                    </div> : "Ticket ID Darisini ..."}
+                    </div> : "Find ticket id ,name ..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -67,8 +67,9 @@ export function SearchTicket({ seat }: SearchTicketProps) {
                                     )}
                                 />
                                 <div className="flex flex-col">
-                                    <div className="">{item.name}</div>
-                                    <div className="">{item.email}</div>
+                                    <div className="text-sm">{item.id}<span className="ml-2">{item.name}</span></div>
+                                    <div className="text-xs"></div>
+                                    <div className="text-xs">{item.ticket_name}</div>
                                 </div>
                             </CommandItem>
                         ))}

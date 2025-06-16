@@ -19,6 +19,7 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
     const authSelectedSeats = selectedSeats.filter((s) => s.admin_id === user?.id);
     const anotherAuthSelectedSeats = selectedSeats.filter((s) => s.admin_id !== user?.id);
     const [bookedSeats, setBookedSeats] = useState<BookedSeat[]>([]);
+    const [bookedSeat, setBookedSeat] = useState<BookedSeat|null>(null);
     const [tickets, setTickets] = useState<Ticket[]>([]);
     const seatCategories = Array.from(new Set(seats.map(seat => seat.category)));
 
@@ -28,11 +29,13 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
         const fetchSelectedSeats = async () => {
             const fetchData = async () => {
                 try {
+                    const show = localStorage.getItem("selectedShow");
+                    setSelectedShow(show??'reconnect')
                     const seats = await findSeats();
                     setSeats(seats);
-                    const bookedSeats = await findBookedSeats(selectedShow);
+                    const bookedSeats = await findBookedSeats(show??'reconnect');
                     setBookedSeats(bookedSeats);
-                    getSeatsLocked(selectedShow).then((res) => {
+                    getSeatsLocked(show??'reconnect').then((res) => {
 
                         setSelectedSeats(res);
                     })
@@ -49,6 +52,7 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
 
     const toggleSelectShow = async (show: string) => {
         setSelectedShow(show);
+        localStorage.setItem("selectedShow",show);
         const seats = await findBookedSeats();
         setBookedSeats(seats);
         getSeatsLocked(selectedShow).then((res) => {
@@ -190,6 +194,8 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
                 selectedCategory,
                 toggleSelectCategory,
                 seatCategories,
+                bookedSeat,
+                setBookedSeat,
             }}
         >
             {children}

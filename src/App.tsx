@@ -7,6 +7,7 @@ import HomePage from './components/pages/home'
 import { AuthProvider } from './context/AuthProvider'
 import LoginPage from './components/pages/login-page'
 import ProtectedRoute from './components/protected-route'
+import TicketsPage from './components/pages/tickets'
 
 function App() {
 
@@ -22,8 +23,8 @@ function App() {
               <Route path="/seats" element={<SeatsPage />} />
               <Route path="/booked-seats" element={<BookedSeatsPage />} />
               <Route path="/seats-layout" element={<SeatsLayoutPage />} />
+              <Route path="/tickets" element={<TicketsPage />} />
             </Route>
-
           </Routes>
         </AuthProvider>
       </Router>
