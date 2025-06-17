@@ -20,7 +20,7 @@ const {toggleSelectCategory, selectedCategory, seatCategories} = useBookedSeats(
         <SelectGroup>
           <SelectLabel>Show</SelectLabel>
           <SelectItem value="all">All</SelectItem>
-          {seatCategories.map((category)=><SelectItem value={category}>{category}</SelectItem>)}
+          {seatCategories.map((category)=><SelectItem key={category} value={category}>{category}</SelectItem>)}
         </SelectGroup>
       </SelectContent>
     </Select>
