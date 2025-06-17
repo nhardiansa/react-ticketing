@@ -130,7 +130,9 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
     const upsertSelectedSeats = (type: string, seat: BookedSeat) => {
         if (seat.show_id === selectedShow) {
             if (type === "seat_locked") {
-                setSelectedSeats([...selectedSeats, seat]);
+                setSelectedSeats((prev) => {
+                    return [...prev, seat];
+                });
             } if (type === "seat_unlocked") {
                 setSelectedSeats((prev) => {
                     const exists = prev.find((s) => s.seat_id === seat.seat_id);
