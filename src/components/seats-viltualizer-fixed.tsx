@@ -16,7 +16,7 @@ export const SeatVirtualizerFixed: React.FC<SeatVirtualizerFixedProps> = ({
     seatSize = 50,
 }) => {
     const [openDialog, setOpenDialog] = useState(false);
-    const { selectedSeats, setSeatConfig } = useSeats();
+    const { seats, setSeatConfig } = useSeats();
 
     return (
         <>
@@ -42,7 +42,7 @@ export const SeatVirtualizerFixed: React.FC<SeatVirtualizerFixedProps> = ({
                                 [...Array(cols)].map((_, colIndex) => {
                                     const index = rowIndex * cols + colIndex;
                                     const key = `${rowIndex}-${colIndex}`;
-                                    const seatData = selectedSeats.find((s) => s.id === key);
+                                    const seatData = seats.find((s) => s.position === key);
 
                                     return (
                                         <div
@@ -81,56 +81,6 @@ export const SeatVirtualizerFixed: React.FC<SeatVirtualizerFixedProps> = ({
                     </TransformComponent>
                 </TransformWrapper>
             </div>
-            {/* <div
-                ref={parentRef}
-                className="h-180 w-full overflow-auto"
-            >
-                <div
-                    className="relative"
-                    style={{
-                        height: `${rowVirtualizer.getTotalSize()}px`,
-                        width: `${columnVirtualizer.getTotalSize()}px`,
-                    }}
-                >
-                    {rowVirtualizer.getVirtualItems().map((virtualRow: VirtualItem) => (
-                        <React.Fragment key={virtualRow.key}>
-                            {columnVirtualizer.getVirtualItems().map((virtualColumn: VirtualItem) => {
-                                const rowIndex = virtualRow.index;
-                                const colIndex = virtualColumn.index;
-                                const key = `${rowIndex}-${colIndex}`;
-                                const seatData = selectedSeats.find((s) => s.id === key);
-                                return (
-                                    <div
-                                        key={virtualColumn.key}
-                                        className={`absolute cursor-pointer flex items-center justify-center text-sm border bg-white hover:bg-gray-50`}
-                                        style={{
-                                            top: 0,
-                                            left: 0,
-                                            width: `${virtualColumn.size}px`,
-                                            height: `${virtualRow.size}px`,
-                                            transform: `translateX(${virtualColumn.start}px) translateY(${virtualRow.start}px)`,
-                                            backgroundColor: seatData?.color ?? undefined,
-                                        }}
-                                        onClick={seatData ? () => {
-                                            if (seatData) {
-                                                setSeatConfig(seatData);
-                                                setOpenDialog(true);
-                                            }
-                                        } : undefined}
-                                    >
-
-                                        {
-                                            seatData ? <div className="flex flex-col text-white">
-                                                <p className="text-xs">{seatData.name}</p>
-                                            </div> : <></>
-                                        }
-                                    </div>
-                                )
-                            })}
-                        </React.Fragment>
-                    ))}
-                </div>
-            </div> */}
             <FormSeatDialog isOpen={openDialog} onOpenChange={setOpenDialog} />
         </>
     )

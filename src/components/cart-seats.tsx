@@ -7,7 +7,7 @@ export default function CartSeats() {
         <div className="flex gap-2">
             {authSelectedSeats.map((locked) => {
                 const seat = seats.find((s) => s.id === locked.seat_id);
-                return <Badge key={locked.seat_id} variant="outline" className='text-white font-bold uppercase' style={{ backgroundColor: seat?.color }}>{seat?.name}</Badge>
+                return <Badge key={seat!.position} variant="outline" className='text-white font-bold uppercase' style={{ backgroundColor: seat?.color }}>{seat?.name}</Badge>
             })}
         </div>
 

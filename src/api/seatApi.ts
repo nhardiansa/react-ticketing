@@ -1,8 +1,12 @@
 import type { Seat } from '@/types/seat';
 import axios, { admin_api } from './axios';
 
-export const findSeats = async (): Promise<Seat[]> => {
-  const res = await axios.get("/api/seats");
+export const findSeats = async (show_id: string): Promise<Seat[]> => {
+  const res = await axios.get("/api/seats",{
+        params: {
+            show_id
+        }
+    });
   return res.data.data as Seat[];
 };
 

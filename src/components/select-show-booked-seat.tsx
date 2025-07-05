@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select"
 import { useBookedSeats } from "@/context/BookedSeatsContext"
 
-export function SelecShow() {
+export function SelectShowBookedSeat() {
 const {toggleSelectShow, selectedShow} = useBookedSeats();
   return (
     <Select value={selectedShow} onValueChange={(value) => toggleSelectShow(value)}>

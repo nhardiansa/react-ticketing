@@ -31,7 +31,7 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
                 try {
                     const show = localStorage.getItem("selectedShow");
                     setSelectedShow(show??'reconnect')
-                    const seats = await findSeats();
+                    const seats = await findSeats(show??'reconnect');
                     setSeats(seats);
                     const bookedSeats = await findBookedSeats(show??'reconnect');
                     setBookedSeats(bookedSeats);

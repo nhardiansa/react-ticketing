@@ -44,10 +44,10 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                             [...Array(cols)].map((_, colIndex) => {
                                 const index = rowIndex * cols + colIndex;
                                 const key = `${rowIndex}-${colIndex}`;
-                                const seatData = seats.find((s) => s.id === key);
-                                const isSelectedSeat = Boolean(authSelectedSeats.find((s) => s.seat_id === key));
-                                const isLocked = Boolean(anotherAuthSelectedSeats.find((s) => s.seat_id === key));
-                                const isBooked = Boolean(bookedSeats.find((s) => s.seat_id === key));
+                                const seatData = seats.find((s) => s.position === key);
+                                const isSelectedSeat = seatData ? Boolean(authSelectedSeats.find((s) => s.seat_id === seatData!.id)) : false;
+                                const isLocked = seatData ? Boolean(anotherAuthSelectedSeats.find((s) => s.seat_id === seatData!.id)) : false;
+                                const isBooked = seatData ? Boolean(bookedSeats.find((s) => s.seat_id === seatData!.id)) : false;
                                 if (seatData?.category != selectedCategory && selectedCategory != "all" && seatData?.category != "STAGE") {
                                     return (<div
                                         key={index}
@@ -94,7 +94,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                                 setOpenDialog(true);
                                             }
                                         } : seatData ? () => {
-                                            toggleSeat(key, seatData);
+                                            toggleSeat(seatData!.id!, seatData);
                                         } : undefined}
                                     >
                                         {isBooked ? 'Booked' : isLocked ? 'Locked' : seatData?.name}

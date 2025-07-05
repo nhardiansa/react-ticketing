@@ -11,10 +11,11 @@ import { Button } from "../ui/button"
 import { IconShoppingCart } from "@tabler/icons-react"
 import CartSeats from "../cart-seats"
 import { useState } from "react"
-import { SelecShow } from "../select-show"
+import { SelectShowBookedSeat } from "../select-show-booked-seat"
 import BookedSeatsSocket from "../booked-seat-socket"
 import { SelecCategory } from "../select-category"
 import { FormCheckoutSeatDialog } from "../dialog/form-checkout-seat-dialog"
+import { CELL_SIZE, COLS, ROWS } from "@/config/config"
 
 export default function BookedSeatsPage() {
     const [openDialog, setOpenDialog] = useState(false);
@@ -35,7 +36,7 @@ export default function BookedSeatsPage() {
                         <div className="@container/main flex flex-1 flex-col gap-2">
                             <div className="flex flex-col">
                                 <div className="flex flex-row gap-2 m-4">
-                                    <SelecShow />
+                                    <SelectShowBookedSeat />
                                     <SelecCategory/>
                                     <Button onClick={() => {
                                         setOpenDialog(true);
@@ -46,7 +47,7 @@ export default function BookedSeatsPage() {
                                     <CartSeats />
                                 </div>
                                 <BookedSeatsSocket>
-                                    <BookedSeats cols={115} rows={50} seatSize={50} />
+                                    <BookedSeats cols={COLS} rows={ROWS} seatSize={CELL_SIZE} />
                                 </BookedSeatsSocket>
                             </div>
                         </div>

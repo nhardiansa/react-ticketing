@@ -1,8 +1,10 @@
 export type Seat = {
     id?: string;
+    position?: string | null;
     name?: string;
     category: string;
     color: string;
+    show_id?: string | null;
 };
 
 export type SeatLocked = {
@@ -15,3 +17,9 @@ export type ResSeatLocked = {
     status: string,
     data:SeatLocked,
 }
+
+export type SeatGenerate = {
+    start: string;
+    cols: number;
+    rows: number;
+};

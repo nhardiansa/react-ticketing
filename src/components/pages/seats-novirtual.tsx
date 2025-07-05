@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { SeatGridNovirtual } from "../seat-grid-novirtual"
 import { Input } from "../ui/input";
+import { CELL_SIZE, COLS, ROWS } from "@/config/config";
 
 export default function SeatsNovirtualPage() {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -19,7 +20,7 @@ export default function SeatsNovirtualPage() {
                 <Input type="color" placeholder="Warna Kursi" />
             </div>
             {/* Zoom Pan Area */}
-            <SeatGridNovirtual cols={160} rows={60} seatSize={60} />
+            <SeatGridNovirtual cols={COLS} rows={ROWS} seatSize={CELL_SIZE} />
         </div>
     )
 }
