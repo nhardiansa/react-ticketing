@@ -5,10 +5,10 @@ export function SeatCountByCateogry() {
     const { countByCategory } = useSeats();
     if (!countByCategory) return null;
 
-    const totalSeats = Object.values(countByCategory).reduce(
-        (acc, curr) => acc + curr.total,
-        0
-    );
+    const totalSeats = Object.entries(countByCategory)
+    .filter(([key]) => key !== "STAGE")
+    .reduce((acc, [, value]) => acc + value.total, 0);
+
     if (countByCategory) {
         return (<div className="flex flex-row justify-start m-5 gap-2">
             <div className="flex flex-row items-center gap-2 font-semibold">
