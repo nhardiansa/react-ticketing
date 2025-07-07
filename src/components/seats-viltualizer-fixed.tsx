@@ -68,9 +68,9 @@ export const SeatVirtualizerFixed: React.FC<SeatVirtualizerFixedProps> = ({
                                                 }
                                             } : undefined}
                                         >
-                                            <div className="flex flex-col justify-center items-center">
-                                                <p className="text-xs font-bold">{seatData?.name}</p>
-                                                <p className="text-xs">{seatData?.category}</p>
+                                            <div className="flex flex-col justify-center items-center text-center">
+                                                <p className="text-[15px] font-bold">{seatData?.name}</p>
+                                                <p className="text-[10px]">{seatData?.category}</p>
                                             </div>
 
                                         </div>

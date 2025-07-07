@@ -17,6 +17,8 @@ export const SeatsProvider = ({ children }: { children: React.ReactNode }) => {
         start: '',
         cols: 0,
         rows: 0,
+        group: 'A',
+        number_start: 1,
     });
 
     const toggleSelectShow = async (show: string) => {
@@ -68,10 +70,10 @@ export const SeatsProvider = ({ children }: { children: React.ReactNode }) => {
         });
     };
 
-    const createSeat = (position: string) => {
+    const createSeat = (position: string, name?: string) => {
         setSeats((prev) => {
             const id = `${selectedShow}-${position}`;
-            const newSeat: Seat = { ...seatConfig, id: id, position: position, show_id: selectedShow };
+            const newSeat: Seat = { ...seatConfig, id: id, name, position: position, show_id: selectedShow };
             const newSeats = [...prev, newSeat];
             postSeat(newSeat).catch((err) =>
                 toast.error(`Gagal hapus kursi: ${err}`)
@@ -147,9 +149,8 @@ export const SeatsProvider = ({ children }: { children: React.ReactNode }) => {
         }
 
         console.log(`Generating seats from start: ${startX}-${startY}, rows: ${rows}, cols: ${cols}`);
-
-        for (let y = startY; y < startY + rows; y++) {
-            for (let x = startX; x < startX + cols; x++) {
+        for (let x = startX; x < startX + rows; x++) {
+            for (let y = startY; y < startY + cols; y++) {
                 const position = `${x}-${y}`;
                 removeSeat(position);
             }
@@ -178,12 +179,21 @@ export const SeatsProvider = ({ children }: { children: React.ReactNode }) => {
             return;
         }
 
-        console.log(`Generating seats from start: ${startX}-${startY}, rows: ${rows}, cols: ${cols}`);
+        const group = seatGenerateConfig.group || '';
+        let seatNumber = seatGenerateConfig.number_start ?? 1;
 
-        for (let y = startY; y < startY + rows; y++) {
-            for (let x = startX; x < startX + cols; x++) {
+        console.log(`Generating seats from start: ${startX}-${startY}, rows: ${rows}, cols: ${cols}`);
+        for (let x = startX; x < startX + rows; x++) {
+            for (let y = startY; y < startY + cols; y++) {
                 const position = `${x}-${y}`;
-                createSeat(position);
+
+                // Format nomor kursi jadi 3 digit, misalnya: 001, 002, 010, 123
+                const formattedNumber = String(seatNumber).padStart(3, '0');
+
+                const name = `${group}${formattedNumber}`;
+                seatNumber++; // Increment setelah membuat nama
+
+                createSeat(position, name);
             }
         }
     }

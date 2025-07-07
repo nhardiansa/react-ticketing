@@ -3,10 +3,7 @@ import { admin_api } from './axios';
 import type { BookedSeat } from '@/types/booked-seat';
 
 export const findTicket = async (): Promise<BookedSeat[]> => {
-    const res = await admin_api.get("/admin_api/tickets", {
-
-    },
-    );
+    const res = await admin_api.get("/admin_api/tickets");
     return res.data.data as BookedSeat[];
 };
 

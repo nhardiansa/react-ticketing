@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/sonner"
 
 createRoot(document.getElementById('root')!).render(
   <div>
-    <Toaster position="top-center"  expand={true}/>
+    <Toaster position="bottom-right"  expand={true}/>
     <App />
   </div>,
 )

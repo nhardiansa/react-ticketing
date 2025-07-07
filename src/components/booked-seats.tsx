@@ -97,7 +97,10 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             toggleSeat(seatData!.id!, seatData);
                                         } : undefined}
                                     >
-                                        {isBooked ? 'Booked' : isLocked ? 'Locked' : seatData?.name}
+                                        <div className="flex flex-col justify-center items-center text-center">
+                                            <p className="text-[15px] font-bold">{isBooked ? 'Booked' : isLocked ? 'Locked' : seatData?.name}</p>
+                                            <p className="text-[10px]">{seatData?.category}</p>
+                                        </div>
                                     </div>
                                 );
                             })

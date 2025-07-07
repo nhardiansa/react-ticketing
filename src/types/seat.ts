@@ -22,4 +22,6 @@ export type SeatGenerate = {
     start: string;
     cols: number;
     rows: number;
+    group: string;
+    number_start: number;
 };

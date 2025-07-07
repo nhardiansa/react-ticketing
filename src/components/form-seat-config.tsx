@@ -68,6 +68,16 @@ export function FormSeatConfig() {
                 <Input name="rows" type="rows" placeholder="Nama Kursi" value={seatGenerateConfig.rows}
                     onChange={handleSeatGenerateChange} />
             </div>
+            <div className="m-5 flex flex-row justify-start">
+                <Label htmlFor="category">Group</Label>
+                <Input name="group" type="group" placeholder="Bisa diisi abjad" value={seatGenerateConfig.group}
+                    onChange={handleSeatGenerateChange} />
+            </div>
+            <div className="m-5 flex flex-row justify-start">
+                <Label htmlFor="category">Nomor Mulai</Label>
+                <Input name="number_start" type="number_start" placeholder="Nomor mulai hitung" value={seatGenerateConfig.number_start}
+                    onChange={handleSeatGenerateChange} />
+            </div>
             <div className="w-full flex flex-row justify-start gap-2 m-5">
                 <Button onClick={generateReset} variant="destructive" className="text-white">Delete</Button>
                 <Button onClick={generateSeats} className="text-white">Generate</Button>

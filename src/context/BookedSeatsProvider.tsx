@@ -1,5 +1,5 @@
 // context/BookedSeatsProvider.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { Seat, SeatLocked } from '@/types/seat';
 import { toast } from 'sonner';
 import { BookedSeatsContext } from './BookedSeatsContext';
@@ -19,7 +19,7 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
     const authSelectedSeats = selectedSeats.filter((s) => s.admin_id === user?.id);
     const anotherAuthSelectedSeats = selectedSeats.filter((s) => s.admin_id !== user?.id);
     const [bookedSeats, setBookedSeats] = useState<BookedSeat[]>([]);
-    const [bookedSeat, setBookedSeat] = useState<BookedSeat|null>(null);
+    const [bookedSeat, setBookedSeat] = useState<BookedSeat | null>(null);
     const [tickets, setTickets] = useState<Ticket[]>([]);
     const seatCategories = Array.from(new Set(seats.map(seat => seat.category)));
 
@@ -30,12 +30,12 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
             const fetchData = async () => {
                 try {
                     const show = localStorage.getItem("selectedShow");
-                    setSelectedShow(show??'reconnect')
-                    const seats = await findSeats(show??'reconnect');
+                    setSelectedShow(show ?? 'reconnect')
+                    const seats = await findSeats(show ?? 'reconnect');
                     setSeats(seats);
-                    const bookedSeats = await findBookedSeats(show??'reconnect');
+                    const bookedSeats = await findBookedSeats(show ?? 'reconnect');
                     setBookedSeats(bookedSeats);
-                    getSeatsLocked(show??'reconnect').then((res) => {
+                    getSeatsLocked(show ?? 'reconnect').then((res) => {
 
                         setSelectedSeats(res);
                     })
@@ -52,7 +52,7 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
 
     const toggleSelectShow = async (show: string) => {
         setSelectedShow(show);
-        localStorage.setItem("selectedShow",show);
+        localStorage.setItem("selectedShow", show);
         const seats = await findBookedSeats();
         setBookedSeats(seats);
         getSeatsLocked(selectedShow).then((res) => {
@@ -64,33 +64,53 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
         setSelectedCategory(category);
     };
 
-    const toggleSeat = (id: string) => {
-        const newSeat: SeatLocked = { seat_id: id, admin_id: user?.id, show_id: selectedShow };
-        toast.promise(lockSeat(newSeat), {
-            loading: 'Lock Seat Loading...',
-            success: (data) => {
-                console.log("Locked", data);
-                if (data.status == "locked") {
-                    setSelectedSeats([...selectedSeats, data.data]);
+    const lockingSeatIdsRef = useRef<Set<string>>(new Set());
+
+    const toggleSeat = async (id: string) => {
+        // Jika sedang diproses, abaikan klik
+        if (lockingSeatIdsRef.current.has(id)) {
+            console.warn(`Seat ${id} is still processing, click ignored`);
+            return;
+        }
+
+        lockingSeatIdsRef.current.add(id); // Tandai sebagai in-process
+
+        const newSeat: SeatLocked = {
+            seat_id: id,
+            admin_id: user?.id,
+            show_id: selectedShow,
+        };
+
+        try {
+            await toast.promise(lockSeat(newSeat), {
+                loading: "Lock Seat Loading...",
+                success: (data) => {
+                    console.log("Locked", data);
+
+                    if (data.status === "locked") {
+                        setSelectedSeats((prev) => {
+                            const exists = prev.some((s) => s.seat_id === id);
+                            if (!exists) {
+                                return [...prev, data.data];
+                            }
+                            return prev; // Tidak ubah apa-apa jika sudah ada
+                        });
+                    } else if (data.status === "unlocked") {
+                        setSelectedSeats((prev) =>
+                            prev.filter((s) => s.seat_id !== id)
+                        );
+                    }
+
                     return `Seat has been ${data.status}`;
-                } if (data.status == "unlocked") {
-                    setSelectedSeats((prev) => {
-                        const exists = prev.find((s) => s.seat_id === id);
-                        let newSeats: SeatLocked[] = prev;
-                        if (exists) {
-                            newSeats = prev.filter((s) => s.seat_id !== id);
-                        }
-                        return newSeats;
-                    });
-                    return `Seat has been ${data.status}`;
-                }
-                return `Seat has been ${data.status}`;
-            },
-            error: (err) => {
-                // optional: custom error handling
-                return err?.message || 'Error locking seat';
-            },
-        });
+                },
+                error: (err) => {
+                    return err?.message || "Error locking seat";
+                },
+            });
+        } finally {
+            // Hapus dari set setelah selesai
+            lockingSeatIdsRef.current.delete(id);
+        }
     };
 
     const claimBookingSeats = async () => {
@@ -131,7 +151,11 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
         if (seat.show_id === selectedShow) {
             if (type === "seat_locked") {
                 setSelectedSeats((prev) => {
-                    return [...prev, seat];
+                    const exists = prev.some((s) => s.seat_id === seat.seat_id);
+                    if (!exists) {
+                        return [...prev, seat];
+                    }
+                    return prev;
                 });
             } if (type === "seat_unlocked") {
                 setSelectedSeats((prev) => {
