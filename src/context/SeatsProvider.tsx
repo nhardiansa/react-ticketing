@@ -187,8 +187,7 @@ export const SeatsProvider = ({ children }: { children: React.ReactNode }) => {
             for (let y = startY; y < startY + cols; y++) {
                 const position = `${x}-${y}`;
 
-                // Format nomor kursi jadi 3 digit, misalnya: 001, 002, 010, 123
-                const formattedNumber = String(seatNumber).padStart(3, '0');
+                const formattedNumber = String(seatNumber);
 
                 const name = `${group}${formattedNumber}`;
                 seatNumber++; // Increment setelah membuat nama

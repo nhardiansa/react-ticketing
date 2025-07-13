@@ -105,14 +105,14 @@ export const SeatGrid: React.FC<SeatGridProps> = ({
                     onDoubleClick={() => toggleSeat(position)}
                     onMouseOver={() => handleMouseOver(position)}
                   >
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center text-center">
                     <div className={`${seatData ? 'text-[5px]' : 'text-xs'}`}>
                       {position}
                     </div>
-                      <div className="text-[10px]">
+                      <div className="text-[15px]">
                         {seatData?.name}
                       </div>
-                      <div className="text-[10px]">
+                      <div className="text-[8px]">
                         {seatData?.category}
                       </div></div>
                   </div>
