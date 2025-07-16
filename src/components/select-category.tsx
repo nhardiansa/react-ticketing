@@ -13,13 +13,13 @@ export function SelecCategory() {
 const {toggleSelectCategory, selectedCategory, seatCategories} = useBookedSeats();
   return (
     <Select value={selectedCategory} onValueChange={(value) => toggleSelectCategory(value)}>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select Show" />
+      <SelectTrigger className="w-[180px] border-2 border-black font-bold text-xl">
+        <SelectValue placeholder="Select Category" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Show</SelectLabel>
-          <SelectItem value="all">All</SelectItem>
+          <SelectLabel>Show Category</SelectLabel>
+          <SelectItem value="all">All Category</SelectItem>
           {seatCategories.map((category)=><SelectItem key={category} value={category}>{category}</SelectItem>)}
         </SelectGroup>
       </SelectContent>

@@ -13,7 +13,7 @@ export function SelectShowBookedSeat() {
 const {toggleSelectShow, selectedShow} = useBookedSeats();
   return (
     <Select value={selectedShow} onValueChange={(value) => toggleSelectShow(value)}>
-      <SelectTrigger className="w-[180px] border-2 border-gray-300 font-bold text-xl">
+      <SelectTrigger className="w-[180px] border-2 border-black font-bold text-xl">
         <SelectValue placeholder="Select Show" />
       </SelectTrigger>
       <SelectContent>

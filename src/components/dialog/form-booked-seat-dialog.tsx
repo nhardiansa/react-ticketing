@@ -55,8 +55,8 @@ export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDia
                             <Input id="id" name="id" value={bookedSeat?.seat?.name} readOnly />
                         </div>
                         <div className="grid gap-3">
-                            <Label htmlFor="ticket_id">ID Ticket</Label>
-                            <Input id="ticket_id" name="ticket_id" value={bookedSeat?.ticket_id} readOnly />
+                            <Label htmlFor="ticket_id">Ticket Darisini</Label>
+                            <Input id="ticket_id" name="ticket_id" value={bookedSeat?.ticket?.ticket_id??'-'} readOnly />
                         </div>
                         <div className="grid gap-3">
                             <Label htmlFor="show_id">Show</Label>

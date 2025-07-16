@@ -34,7 +34,7 @@ export function SearchTicket({ seat }: SearchTicketProps) {
             <PopoverTrigger asChild>
                 <Button variant="outline" role="combobox" className="w-full justify-between">
                     {selected ? <div className="flex flex-row text-sm gap-2">
-                        <div>{selected.id}</div>
+                        <div>{selected.ticket_id}</div>
                         <div>{selected.name}</div>
                     </div> : "Find ticket id ,name email ..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
@@ -62,7 +62,7 @@ export function SearchTicket({ seat }: SearchTicketProps) {
                                     onSelect={() => {
                                         if (isBooked) {
                                             toast.error(
-                                                `Tiket sudah dibooking untuk kursi ${bookedSeat?.category} - ${bookedSeat?.name}`
+                                                `Tiket sudah digunakan untuk kursi ${bookedSeat?.name} (${bookedSeat?.category})`
                                             );
                                             return;
                                         }
@@ -72,12 +72,12 @@ export function SearchTicket({ seat }: SearchTicketProps) {
                                     }}
                                     className={cn(
                                         "cursor-pointer",
-                                        isBooked && "bg-destructive/10 text-destructive hover:bg-destructive/20"
+                                        isBooked && "bg-destructive/10 text-destructive hover:text-destructive hover:bg-destructive/20 cursor-not-allowed"
                                     )}
                                 >
                                     <div className="flex flex-col">
                                         <div className="text-sm font-medium">
-                                            {item.id} <span className="ml-2">{item.name}</span>
+                                            {item.ticket_id} <span className="ml-2">{item.name}</span>
                                         </div>
                                         <div className="text-xs text-muted-foreground">{`${item.ticket_name} - ${item.show_id}`}</div>
                                         {isBooked && bookedSeat && (
