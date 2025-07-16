@@ -57,7 +57,7 @@ export function CarouselImages() {
           </div>
           <TransformWrapper
             initialScale={1}
-            minScale={0.5}
+            minScale={0.1}
             maxScale={4}
             wheel={{ step: 50 }}
             pinch={{ step: 5 }}
