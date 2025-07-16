@@ -43,10 +43,10 @@ export function CarouselImages() {
       <Card className="h-full shadow-none border-none bg-transparent">
         <CardContent className="">
           <img
-            src={'https://res.cloudinary.com/delljgt3m/image/upload/v1751861761/assets/poster-3.jpg'}
+            src={showImages[0]?.layout}
             alt={`Image`}
             className="w-full h-full object-cover rounded-xl cursor-zoom-in"
-            onClick={() => setSelectedImage('https://res.cloudinary.com/delljgt3m/image/upload/v1751861761/assets/poster-3.jpg')}
+            onClick={() => setSelectedImage(showImages[0]?.layout)}
           />
         </CardContent>
       </Card>
