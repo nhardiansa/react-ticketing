@@ -11,12 +11,12 @@ export function CarouselImages() {
   const images = [
     {
       'src': 'https://res.cloudinary.com/delljgt3m/image/upload/v1751861761/assets/poster-1.jpg',
-      'layout': 'https://res.cloudinary.com/delljgt3m/image/upload/v1751861761/assets/poster-3.jpg',
+      'layout': 'https://res.cloudinary.com/delljgt3m/image/upload/v1751861761/assets/layout-reconnect_h1s1qz.png',
       'show_id': 'reconnect',
     },
     {
       'src': 'https://res.cloudinary.com/delljgt3m/image/upload/v1751861761/assets/poster-2.jpg',
-      'layout': 'https://res.cloudinary.com/delljgt3m/image/upload/v1751861761/assets/poster-3.jpg',
+      'layout': 'https://res.cloudinary.com/delljgt3m/image/upload/v1751861761/assets/layout-disconnect_rdacyb.png',
       'show_id': 'disconnect',
     }
   ];

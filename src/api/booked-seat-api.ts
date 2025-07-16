@@ -1,6 +1,6 @@
 import type { ResSeatLocked, SeatLocked } from '@/types/seat';
 import axios, { admin_api } from './axios';
-import type { BookedSeat } from '@/types/booked-seat';
+import type { BookedSeat, ResDeleteBookedSeat } from '@/types/booked-seat';
 
 export const findBookedSeats = async (show_id?: string): Promise<BookedSeat[]> => {
     const res = await axios.get("/api/booked-seats", {
@@ -37,5 +37,14 @@ export const getSeatsLocked = async (show_id: string): Promise<SeatLocked[]> => 
         return res.data.data as SeatLocked[];
     } else {
         return [];
+    }
+};
+
+export const deleteBookedSeat = async (bookedID: string): Promise<ResDeleteBookedSeat> => {
+    const res = await admin_api.delete(`/admin_api/booked-seats/${bookedID}`);
+    if (res.data.success === true) {
+        return {success: true, message:"Success delete booked seat" };
+    } else {
+        return {success: false, message:res.data.message };
     }
 };

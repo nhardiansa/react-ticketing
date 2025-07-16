@@ -4,7 +4,7 @@ import type { Seat, SeatLocked } from '@/types/seat';
 import { toast } from 'sonner';
 import { BookedSeatsContext } from './BookedSeatsContext';
 import type { BookedSeat } from '@/types/booked-seat';
-import { findBookedSeats, getSeatsLocked, lockSeat, upsertSeats } from '@/api/booked-seat-api';
+import { deleteBookedSeat, findBookedSeats, getSeatsLocked, lockSeat, upsertSeats } from '@/api/booked-seat-api';
 import { findSeats } from '@/api/seatApi';
 import { useAuth } from './AuthContext';
 import type { Ticket } from '@/types/ticket';
@@ -85,8 +85,6 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
             await toast.promise(lockSeat(newSeat), {
                 loading: "Lock Seat Loading...",
                 success: (data) => {
-                    console.log("Locked", data);
-
                     if (data.status === "locked") {
                         setSelectedSeats((prev) => {
                             const exists = prev.some((s) => s.seat_id === id);
@@ -133,6 +131,33 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
         }
     };
 
+    const removeBookedSeat = async (bookedID: string) => {
+        try {
+            await toast.promise(deleteBookedSeat(bookedID), {
+                loading: "Delete booked seat loading...",
+                success: (res) => {
+                    if (res.success === true) {
+                        setBookedSeats((prev) => {
+                            const exists = prev.find((s) => s.id === bookedID);
+                            let newSeats: BookedSeat[] = prev;
+                            if (exists) {
+                                newSeats = prev.filter((s) => s.id !== bookedID);
+                            }
+                            return newSeats;
+                        });
+                    }
+                    return res.message;
+                },
+                error: (err) => {
+                    return err?.message || "Error delete booked seat";
+                },
+            });
+
+        } catch (err) {
+            toast.error(`Failed to booking seats: ${err}`);
+        }
+    };
+
     const upsertSeatFromBookedSeat = (seat: BookedSeat) => {
         setBookedSeats((prev) => {
             const existingIndex = bookedSeats.findIndex((s) => s.id === seat.id);
@@ -171,7 +196,7 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
     }
 
     const searchTicketsByID = async (id: string) => {
-        const tickets = await findTicketsByID(id);
+        const tickets = await findTicketsByID(id, 1, 5, selectedShow);
         setTickets(tickets);
     }
 
@@ -222,6 +247,7 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
                 seatCategories,
                 bookedSeat,
                 setBookedSeat,
+                removeBookedSeat,
             }}
         >
             {children}

@@ -19,6 +19,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
         seats, authSelectedSeats,
         anotherAuthSelectedSeats, bookedSeats, toggleSeat,
         selectedCategory, setBookedSeat,
+        selectedShow,
     } = useBookedSeats();
     const [openDialog, setOpenDialog] = useState(false);
     return (
@@ -32,7 +33,6 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                 doubleClick={{ disabled: true }}
             >
                 <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
-
                     <div
                         style={{
                             width: cols * seatSize,
@@ -44,6 +44,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                             [...Array(cols)].map((_, colIndex) => {
                                 const index = rowIndex * cols + colIndex;
                                 const key = `${rowIndex}-${colIndex}`;
+                                const id = `${selectedShow}-${rowIndex}-${colIndex}`;
                                 const seatData = seats.find((s) => s.position === key);
                                 const isSelectedSeat = seatData ? Boolean(authSelectedSeats.find((s) => s.seat_id === seatData!.id)) : false;
                                 const isLocked = seatData ? Boolean(anotherAuthSelectedSeats.find((s) => s.seat_id === seatData!.id)) : false;
@@ -78,7 +79,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             left: colIndex * seatSize,
                                             width: seatSize - 2,
                                             height: seatSize - 2,
-                                            backgroundColor: isBooked || isLocked ? "black" : isSelectedSeat ? 'orangered' : seatData ? seatData.color : "white",
+                                            backgroundColor: isBooked || isLocked ? "black" : isSelectedSeat ? '#758694' : seatData ? seatData.color : "white",
                                             border: isSelectedSeat ? "3px solid black" : "1px solid white",
                                             boxSizing: "border-box",
                                             fontSize: 10,
@@ -88,7 +89,8 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             color: "white",
                                         }}
                                         onClick={seatData?.category == "STAGE" ? undefined : isBooked ? () => {
-                                            const data = bookedSeats.find((s) => s.seat_id === key);
+                                            const data = bookedSeats.find((s) => s.seat_id === id);
+                                            console.log("BookedSeat", data);
                                             if (data) {
                                                 setBookedSeat(data);
                                                 setOpenDialog(true);

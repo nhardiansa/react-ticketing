@@ -21,6 +21,8 @@ import {
 import { useBookedSeats } from "@/context/BookedSeatsContext";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 interface FormBookedSeatDialogProps {
     isOpen: boolean;
@@ -28,7 +30,17 @@ interface FormBookedSeatDialogProps {
 }
 
 export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDialogProps) {
-    const { bookedSeat } = useBookedSeats();
+    const { user } = useAuth();
+    const { bookedSeat, removeBookedSeat } = useBookedSeats();
+
+    const handleDelete = async () => {
+    if( user?.id !== bookedSeat?.admin_id){
+        toast.error("Anda bukan admin yang membuat bookingan seat");
+        return;
+    }
+        removeBookedSeat(bookedSeat?.id??'');
+        onOpenChange(false);
+    };
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -39,8 +51,8 @@ export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDia
                     </DialogHeader>
                     <div className="flex flex-col mt-4 gap-4">
                         <div className="grid gap-3">
-                            <Label htmlFor="id">ID</Label>
-                            <Input id="id" name="id" value={bookedSeat?.id} readOnly />
+                            <Label htmlFor="id">Seat Number</Label>
+                            <Input id="id" name="id" value={bookedSeat?.seat?.name} readOnly />
                         </div>
                         <div className="grid gap-3">
                             <Label htmlFor="ticket_id">ID Ticket</Label>
@@ -54,18 +66,10 @@ export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDia
                             <Label htmlFor="name">Name</Label>
                             <Input id="name" name="name" value={bookedSeat?.name} readOnly />
                         </div>
-                        {/* <div className="grid gap-3">
-                        <Label htmlFor="gender">Gender</Label>
-                        <Input id="gender" name="gender" value={bookedSeat?.gender} />
-                    </div>
-                    <div className="grid gap-3">
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" name="email" type="email" value={bookedSeat?.email} />
-                    </div>
-                    <div className="grid gap-3">
-                        <Label htmlFor="phone">Phone</Label>
-                        <Input id="phone" name="phone" type="phone" value={bookedSeat?.phone} />
-                    </div> */}
+                        <div className="grid gap-3">
+                            <Label htmlFor="admin">Admin</Label>
+                            <Input id="admin" name="admin" value={bookedSeat?.admin_id} readOnly />
+                        </div>
                     </div>
                     <DialogFooter className="mt-4">
                         <DialogClose asChild>
@@ -77,14 +81,14 @@ export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDia
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogTitle>Anda yakin ingin menghapus data ini?</AlertDialogTitle>
                                     <AlertDialogDescription>
-                                        This action cannot be undone. This will permanently delete booked seat {bookedSeat?.name} with ticket {bookedSeat?.ticket_id}
+                                        Akan menghapus {bookedSeat?.name} dengan ID Tiket {bookedSeat?.ticket_id}
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction>Delete</AlertDialogAction>
+                                    <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
                         </AlertDialog>

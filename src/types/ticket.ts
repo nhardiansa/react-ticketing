@@ -1,3 +1,5 @@
+import type { BookedSeat } from "./booked-seat";
+
 export type Ticket = {
     id?: string;
     name?: string;
@@ -6,4 +8,5 @@ export type Ticket = {
     phone?: string;
     ticket_name?: string;
     show_id?: string;
+    booked_seat?:BookedSeat | null;
 };

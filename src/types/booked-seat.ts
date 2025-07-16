@@ -12,3 +12,8 @@ export type BookedSeat = {
     ticket?: Ticket | null;
     created_at?: string;
 };
+
+export type ResDeleteBookedSeat = {
+    success: boolean;
+    message:string;
+}
