@@ -34,11 +34,11 @@ export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDia
     const { bookedSeat, removeBookedSeat } = useBookedSeats();
 
     const handleDelete = async () => {
-    if( user?.id !== bookedSeat?.admin_id){
-        toast.error("Anda bukan admin yang membuat bookingan seat");
-        return;
-    }
-        removeBookedSeat(bookedSeat?.id??'');
+        if (user?.id !== bookedSeat?.admin_id) {
+            toast.error("Anda bukan admin yang membuat bookingan seat");
+            return;
+        }
+        removeBookedSeat(bookedSeat?.id ?? '');
         onOpenChange(false);
     };
 
@@ -56,7 +56,7 @@ export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDia
                         </div>
                         <div className="grid gap-3">
                             <Label htmlFor="ticket_id">Ticket Darisini</Label>
-                            <Input id="ticket_id" name="ticket_id" value={bookedSeat?.ticket?.ticket_id??'-'} readOnly />
+                            <Input id="ticket_id" name="ticket_id" value={bookedSeat?.ticket?.ticket_id ?? '-'} readOnly />
                         </div>
                         <div className="grid gap-3">
                             <Label htmlFor="show_id">Show</Label>
@@ -71,7 +71,7 @@ export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDia
                             <Input id="admin" name="admin" value={bookedSeat?.admin_id} readOnly />
                         </div>
                     </div>
-                    <DialogFooter className="mt-4">
+                    {user?.id === bookedSeat?.admin_id ? (<DialogFooter className="mt-4">
                         <DialogClose asChild>
                             <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
                         </DialogClose>
@@ -92,7 +92,7 @@ export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDia
                                 </AlertDialogFooter>
                             </AlertDialogContent>
                         </AlertDialog>
-                    </DialogFooter>
+                    </DialogFooter>) : <></>}
                 </form>
             </DialogContent>
         </Dialog >

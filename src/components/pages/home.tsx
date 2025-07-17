@@ -72,7 +72,7 @@ function GRID() {
                                                 display: "flex",
                                                 alignItems: "center",
                                                 justifyContent: "center",
-                                                color: "white",
+                                                color: "black",
                                             }}
                                         >
                                         </div>);

@@ -94,7 +94,7 @@ export const SeatGrid: React.FC<SeatGridProps> = ({
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      color: seatData ? 'white' : 'black',
+                      color: 'black',
                     }}
                     onClick={() => {
                       if (seatData) {

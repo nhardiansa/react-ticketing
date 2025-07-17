@@ -86,7 +86,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             display: "flex",
                                             alignItems: "center",
                                             justifyContent: "center",
-                                            color: "white",
+                                            color: "black",
                                         }}
                                         onClick={seatData?.category == "STAGE" ? undefined : isBooked ? () => {
                                             const data = bookedSeats.find((s) => s.seat_id === id);

@@ -18,7 +18,7 @@ export function SearchTicket({ seat }: SearchTicketProps) {
     const [selected, setSelected] = useState<Ticket | null>(null)
     const [search, setSearch] = useState("")
     const [loading, setLoading] = useState(false)
-    const { tickets, searchTicketsByID, handleSelectedTicket } = useBookedSeats();
+    const { tickets, searchTicketsByID, handleSelectedTicket,setTickets } = useBookedSeats();
 
     const handleSearch = async (id: string) => {
         setSearch(id);
@@ -68,6 +68,7 @@ export function SearchTicket({ seat }: SearchTicketProps) {
                                         }
                                         handleSelectedTicket(item, seat);
                                         setSelected(item);
+                                        setTickets([]);
                                         setOpen(false);
                                     }}
                                     className={cn(

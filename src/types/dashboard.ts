@@ -1,6 +1,7 @@
 export interface SeatCategorySummary {
   total_seats: number;
   booked_seats: number;
+  color: string;
 }
 
 export type ShowSeatSummary = {

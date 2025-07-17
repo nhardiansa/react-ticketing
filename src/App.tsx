@@ -8,6 +8,7 @@ import { AuthProvider } from './context/AuthProvider'
 import LoginPage from './components/pages/login-page'
 import ProtectedRoute from './components/protected-route'
 import TicketsPage from './components/pages/tickets'
+import TableBookedSeatPage from './components/pages/table-booked-seats'
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
               <Route path="/booked-seats" element={<BookedSeatsPage />} />
               <Route path="/seats-layout" element={<SeatsLayoutPage />} />
               <Route path="/tickets" element={<TicketsPage />} />
+              <Route path="/booked" element={<TableBookedSeatPage />} />
             </Route>
           </Routes>
         </AuthProvider>

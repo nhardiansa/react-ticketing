@@ -4,6 +4,7 @@ import {
   IconLayout,
   IconChairDirector,
   IconTicket,
+  IconTable
 } from "@tabler/icons-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -37,14 +38,19 @@ const data = {
       icon: IconChairDirector,
     },
     {
-      title: "Layout Kursi",
-      url: "/seats",
-      icon: IconLayout,
+      title: "Table Booked",
+      url: "/booked",
+      icon: IconTable,
     },
     {
       title: "Tickets",
       url: "/tickets",
       icon: IconTicket,
+    },
+    {
+      title: "Layout Kursi",
+      url: "/seats",
+      icon: IconLayout,
     },
   ],
 }
