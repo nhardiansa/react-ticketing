@@ -4,8 +4,8 @@ import {
     SidebarInset,
     SidebarProvider,
 } from "@/components/ui/sidebar"
-import { TicketsProvider } from "@/context/TicketsProvider"
 import { TableBookedSeats } from "../table-booked-seats"
+import { BookedSeatsProvider } from "@/context/BookedSeatsProvider"
 
 export default function TableBookedSeatPage() {
     return (
@@ -17,7 +17,7 @@ export default function TableBookedSeatPage() {
                 } as React.CSSProperties
             }
         >
-            <TicketsProvider>
+            <BookedSeatsProvider>
                 <AppSidebar variant="inset" />
                 <SidebarInset>
                     <SiteHeader title="Tickets" />
@@ -29,7 +29,7 @@ export default function TableBookedSeatPage() {
                         </div>
                     </div>
                 </SidebarInset>
-            </TicketsProvider>
+            </BookedSeatsProvider>
         </SidebarProvider>
     )
 }

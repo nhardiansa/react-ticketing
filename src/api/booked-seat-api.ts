@@ -28,7 +28,7 @@ export const lockSeat = async (seat: SeatLocked): Promise<ResSeatLocked> => {
 };
 
 export const getSeatsLocked = async (show_id: string): Promise<SeatLocked[]> => {
-    const res = await admin_api.get("/admin_api/seats/locked", {
+    const res = await admin_api.get("/api/seats/locked", {
         params: {
             show_id
         }

@@ -11,6 +11,7 @@ import { Input } from "./ui/input";
 import { IconSearch } from "@tabler/icons-react";
 import { useBookedSeats } from "@/context/BookedSeatsContext";
 import { useState, useMemo } from "react";
+import { SelectShowBookedSeat } from "./select-show-booked-seat";
 
 export function TableBookedSeats() {
     const { bookedSeats } = useBookedSeats();
@@ -48,6 +49,7 @@ export function TableBookedSeats() {
     return (
         <>
             <div className="flex flex-row justify-between items-center gap-5 mx-5">
+                <SelectShowBookedSeat/>
                 <div className="w-full flex flex-row items-center gap-2">
                     <IconSearch />
                     <Input
@@ -64,11 +66,11 @@ export function TableBookedSeats() {
                     <TableRow>
                         <TableHead className="w-[100px]">Seat Number</TableHead>
                         <TableHead className="w-[100px]">Category</TableHead>
-                        <TableHead className="w-40">Ticket Darisini</TableHead>
+                        <TableHead className="w-20">Ticket Darisini</TableHead>
+                        <TableHead className="w-20">Ticket Name</TableHead>
                         <TableHead className="w-40">Name</TableHead>
                         <TableHead className="w-10">Gender</TableHead>
                         <TableHead className="w-20">Email</TableHead>
-                        <TableHead className="w-20">Phone</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -77,10 +79,10 @@ export function TableBookedSeats() {
                             <TableCell className="font-medium">{data.seat?.name}</TableCell>
                             <TableCell className="font-medium">{data.seat?.category}</TableCell>
                             <TableCell>{data.ticket?.ticket_id}</TableCell>
+                            <TableCell>{data.ticket?.ticket_name}</TableCell>
                             <TableCell>{data.ticket?.name}</TableCell>
                             <TableCell>{data.ticket?.gender}</TableCell>
                             <TableCell>{data.ticket?.email}</TableCell>
-                            <TableCell>{data.ticket?.phone}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

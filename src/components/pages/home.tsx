@@ -17,7 +17,7 @@ const HomePage = () => {
 export default HomePage;
 
 function GRID() {
-    const { seats, bookedSeats, selectedShow, selectedCategory } = useBookedSeats();
+    const { seats, bookedSeats, selectedShow, selectedCategory, anotherAuthSelectedSeats } = useBookedSeats();
 
     return (
         <div className="flex flex-col items-center gap-2">
@@ -54,6 +54,7 @@ function GRID() {
                                     const index = rowIndex * COLS + colIndex;
                                     const key = `${rowIndex}-${colIndex}`;
                                     const seatData = seats.find((s) => s.position === key);
+                                    const isLocked = seatData ? Boolean(anotherAuthSelectedSeats.find((s) => s.seat_id === seatData!.id)) : false;
                                     const isBooked = seatData ? Boolean(bookedSeats.find((s) => s.seat_id === seatData!.id)) : false;
 
                                     if (seatData?.category != selectedCategory && selectedCategory != "all" && seatData?.category != "STAGE") {
@@ -72,7 +73,7 @@ function GRID() {
                                                 display: "flex",
                                                 alignItems: "center",
                                                 justifyContent: "center",
-                                                color: "black",
+                                                color: "white",
                                             }}
                                         >
                                         </div>);
@@ -93,7 +94,7 @@ function GRID() {
                                                 display: "flex",
                                                 alignItems: "center",
                                                 justifyContent: "center",
-                                                color: "white",
+                                                color: isLocked || isBooked?"white": "black",
                                             }}
 
                                         >

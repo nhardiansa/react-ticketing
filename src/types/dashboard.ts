@@ -12,4 +12,7 @@ export interface BookedSeatsSummary {
   booked_seats: {
     [showId: string]: ShowSeatSummary;
   };
+   ticket_summary: TicketSummary; 
 }
+
+type TicketSummary = Record<string, Record<string, number>>;
