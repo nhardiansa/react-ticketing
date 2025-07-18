@@ -34,7 +34,7 @@ export function TableTickets() {
                         <TableHead className="w-40">Name</TableHead>
                         <TableHead className="w-10">Gender</TableHead>
                         <TableHead className="w-20">Email</TableHead>
-                        <TableHead className="w-20">Phone</TableHead>
+                        <TableHead className="w-20">Show</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -45,7 +45,7 @@ export function TableTickets() {
                             <TableCell>{ticket.name}</TableCell>
                             <TableCell>{ticket.gender}</TableCell>
                             <TableCell>{ticket.email}</TableCell>
-                            <TableCell>{ticket.phone}</TableCell>
+                            <TableCell>{ticket.show_id}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
