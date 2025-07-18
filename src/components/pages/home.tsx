@@ -87,7 +87,7 @@ function GRID() {
                                                 left: colIndex * CELL_SIZE,
                                                 width: CELL_SIZE - 2,
                                                 height: CELL_SIZE - 2,
-                                                backgroundColor: isBooked ? "black" : seatData ? seatData.color : "white",
+                                                backgroundColor: isBooked || isLocked ? "black" : seatData ? seatData.color : "white",
                                                 border: "1px solid white",
                                                 boxSizing: "border-box",
                                                 fontSize: 10,
@@ -99,7 +99,7 @@ function GRID() {
 
                                         >
                                             <div className="flex flex-col justify-center items-center text-center">
-                                                <p className="text-[15px] font-bold">{isBooked ? 'Booked' : seatData?.name}</p>
+                                                <p className="text-[15px] font-bold">{isBooked ? 'Booked' :isLocked?'Locked': seatData?.name}</p>
                                                 <p className="text-[10px]">{seatData?.category}</p>
                                             </div>
                                         </div>
