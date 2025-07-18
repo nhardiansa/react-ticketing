@@ -9,7 +9,7 @@ interface TicketSummaryTableProps {
 
 export const TicketSummaryTable: React.FC<TicketSummaryTableProps> = ({ ticketSummary }) => {
   return (
-    <Card className="w-100 m-4">
+    <Card className="w-1/2 m-4">
       <CardHeader>
         <CardTitle className="text-lg">Tickets</CardTitle>
       </CardHeader>
