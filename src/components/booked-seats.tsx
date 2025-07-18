@@ -86,7 +86,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             display: "flex",
                                             alignItems: "center",
                                             justifyContent: "center",
-                                            color: isLocked || isBooked ? "white" : "black",
+                                            color: isLocked || isBooked || seatData?.color == "#000000"? "white" : "black",
                                         }}
                                         onClick={seatData?.category == "STAGE" ? undefined : isBooked ? () => {
                                             const data = bookedSeats.find((s) => s.seat_id === id);
@@ -108,6 +108,14 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                             })
                         )}
                     </div>
+                    <div className="absolute top-0 left-400 bg-transparent">
+                            <p className="font-bold text-[200px] uppercase">{selectedShow}</p>
+                            <p className="text-[150px] uppercase">{selectedCategory == 'all'?'Semua Category':selectedCategory}</p>
+                        </div>
+                        <div className="absolute top-0 right-300 bg-transparent">
+                            <p className="font-bold text-[200px] uppercase">{selectedShow}</p>
+                            <p className="text-[150px] uppercase">{selectedCategory == 'all'?'Semua Category':selectedCategory}</p>
+                        </div>
                 </TransformComponent>
             </TransformWrapper>
             <FormBookedSeatDialog isOpen={openDialog} onOpenChange={setOpenDialog} />

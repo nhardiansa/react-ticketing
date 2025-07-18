@@ -59,7 +59,7 @@ export const SeatVirtualizerFixed: React.FC<SeatVirtualizerFixedProps> = ({
                                                 display: "flex",
                                                 alignItems: "center",
                                                 justifyContent: "center",
-                                                color: "black",
+                                                color: seatData?.color == "#000000"?"white":"black",
                                             }}
                                             onClick={seatData ? () => {
                                                 if (seatData) {
