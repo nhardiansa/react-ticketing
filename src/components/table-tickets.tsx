@@ -40,7 +40,7 @@ export function TableTickets() {
                 <TableBody>
                     {tickets?.map((ticket) => (
                         <TableRow key={ticket.id}>
-                            <TableCell className="font-medium">{ticket.id}</TableCell>
+                            <TableCell className="font-medium">{ticket.ticket_id}</TableCell>
                             <TableCell>{ticket.ticket_name}</TableCell>
                             <TableCell>{ticket.name}</TableCell>
                             <TableCell>{ticket.gender}</TableCell>
