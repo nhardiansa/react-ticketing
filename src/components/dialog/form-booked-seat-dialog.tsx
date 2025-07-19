@@ -70,7 +70,7 @@ export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDia
                             <Label htmlFor="admin">Admin</Label>
                             <Input id="admin" name="admin" value={bookedSeat?.admin_id} readOnly />
                         </div>
-                        <div className="grid gap-3">
+                        bookedSeat?.created_at === undefined ?<></>:<div className="grid gap-3">
                             <Label htmlFor="created_at">Tgl Booking</Label>
                             <Input id="created_at" name="created_at" value={formatDate(bookedSeat!.created_at!)} readOnly />
                         </div>
