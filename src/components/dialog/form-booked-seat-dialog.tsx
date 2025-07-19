@@ -70,6 +70,10 @@ export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDia
                             <Label htmlFor="admin">Admin</Label>
                             <Input id="admin" name="admin" value={bookedSeat?.admin_id} readOnly />
                         </div>
+                        <div className="grid gap-3">
+                            <Label htmlFor="created_at">Tgl Booking</Label>
+                            <Input id="created_at" name="created_at" value={formatDate(bookedSeat!.created_at!)} readOnly />
+                        </div>
                     </div>
                     {user?.id === bookedSeat?.admin_id ? (<DialogFooter className="mt-4">
                         <DialogClose asChild>
@@ -97,4 +101,17 @@ export function FormBookedSeatDialog({ isOpen, onOpenChange }: FormBookedSeatDia
             </DialogContent>
         </Dialog >
     )
+}
+
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+  const year = date.getFullYear();
+
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${day}-${month}-${year} ${hours}:${minutes}`;
 }
