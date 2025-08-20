@@ -20,6 +20,15 @@ export function FormCheckoutSeatDialog({ isOpen, onOpenChange }: FormCheckoutSea
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // prevent reload
+
+        // get all ticket_id from authSelectedSeats and check if they are not same
+        const ticketIds = authSelectedSeats.map(seat => seat.ticket_id);
+        const uniqueTicketIds = new Set(ticketIds);
+        if (uniqueTicketIds.size !== ticketIds.length) {
+            alert("Terdapat tiket yang sama, silakan periksa kembali.");
+            return;
+        }
+
         await claimBookingSeats();
         onOpenChange(false); // close dialog after submit
     };
@@ -36,7 +45,7 @@ export function FormCheckoutSeatDialog({ isOpen, onOpenChange }: FormCheckoutSea
                             {authSelectedSeats.map((locked) => {
                                 const seat = seats.find((s) => s.id === locked.seat_id);
                                 return <div key={locked.seat_id} className="flex flex-row items-center border py-2 px-2 gap-2">
-                                    <div className="p-2 flex flex-col items-center justify-center w-20 text-white rounded-lg" style={{backgroundColor:seat?.color??''}}>
+                                    <div className="p-2 flex flex-col items-center justify-center w-20 text-white rounded-lg" style={{ backgroundColor: seat?.color ?? '' }}>
                                         <div className="font-bold">{seat?.name}</div>
                                         <div className="text-sm">{seat?.category}</div>
                                     </div>
