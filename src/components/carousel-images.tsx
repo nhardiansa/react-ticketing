@@ -11,12 +11,12 @@ export function CarouselImages() {
   const images = [
     {
       'src': 'https://res.cloudinary.com/delljgt3m/image/upload/v1751861761/assets/poster-1.jpg',
-      'layout': 'https://res.cloudinary.com/delljgt3m/image/upload/v1752640341/assets/layout-reconnect_h1s1qz.png',
+      'layout': 'https://res.cloudinary.com/ilyasana-95/image/upload/v1755498755/ittiba-makassar/LAYOUT_ITTIBA_poplbc.png',
       'show_id': 'reconnect',
     },
     {
       'src': 'https://res.cloudinary.com/delljgt3m/image/upload/v1751861761/assets/poster-2.jpg',
-      'layout': 'https://res.cloudinary.com/delljgt3m/image/upload/v1752640332/assets/layout-disconnect_rdacyb.png',
+      'layout': 'https://res.cloudinary.com/ilyasana-95/image/upload/v1755498755/ittiba-makassar/LAYOUT_ITTIBA_poplbc.png',
       'show_id': 'disconnect',
     }
   ];
@@ -27,7 +27,7 @@ export function CarouselImages() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-screen-lg mx-auto">
-      <Card className="h-full shadow-none border-none bg-transparent">
+      {/* <Card className="h-full shadow-none border-none bg-transparent">
         <CardContent className="">
           <img
             src={showImages[0]?.src}
@@ -36,10 +36,10 @@ export function CarouselImages() {
             onClick={() => setSelectedImage(showImages[0]?.src)}
           />
         </CardContent>
-      </Card>
-      <h1 className="text-xl lg:text-4xl font-semibold text-center uppercase mt-5">
+      </Card> */}
+      {/* <h1 className="text-xl lg:text-4xl font-semibold text-center uppercase mt-5">
         {`Layout Kursi`}
-      </h1>
+      </h1> */}
       <Card className="h-full shadow-none border-none bg-transparent">
         <CardContent className="">
           <img

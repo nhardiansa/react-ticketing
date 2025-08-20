@@ -26,7 +26,7 @@ function GRID() {
                 <SelectShowBookedSeat />
             </div>
             <h1 className="text-xl lg:text-4xl font-semibold text-center uppercase">
-                {`ITTIBA' ${selectedShow} SOLO`}
+                {`LAYOUT ITTIBA' ${selectedShow} MAKASSAR`}
             </h1>
             <CarouselImages />
             <h1 className="text-xl lg:text-4xl font-semibold text-center uppercase mt-5">
@@ -41,8 +41,9 @@ function GRID() {
                     doubleClick={{ disabled: true }}
                 >
                     <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
-                        
+
                         <div
+                            className="wrapper-cells"
                             style={{
                                 width: COLS * CELL_SIZE,
                                 height: ROWS * CELL_SIZE,
@@ -99,7 +100,7 @@ function GRID() {
 
                                         >
                                             <div className="flex flex-col justify-center items-center text-center">
-                                                <p className="text-[15px] font-bold">{isBooked ? 'Booked' :isLocked?'Locked': seatData?.name}</p>
+                                                <p className="text-[15px] font-bold">{isBooked ? 'Booked' : isLocked ? 'Locked' : seatData?.name}</p>
                                                 <p className="text-[10px]">{seatData?.category}</p>
                                             </div>
                                         </div>
@@ -107,14 +108,14 @@ function GRID() {
                                 })
                             )}
                         </div>
-                        <div className="absolute top-0 left-400 bg-transparent">
+                        <div className="absolute top-0 left-400 bg-transparent flex flex-col items-center">
                             <p className="font-bold text-[200px] uppercase">{selectedShow}</p>
-                            <p className="text-[150px] uppercase">{selectedCategory == 'all'?'Semua Category':selectedCategory}</p>
+                            <p className="text-[150px] uppercase">{selectedCategory == 'all' ? 'Semua Category' : selectedCategory}</p>
                         </div>
-                        <div className="absolute top-0 right-300 bg-transparent">
+                        {/* <div className="absolute top-0 right-300 bg-transparent">
                             <p className="font-bold text-[200px] uppercase">{selectedShow}</p>
-                            <p className="text-[150px] uppercase">{selectedCategory == 'all'?'Semua Category':selectedCategory}</p>
-                        </div>
+                            <p className="text-[150px] uppercase">{selectedCategory == 'all' ? 'Semua Category' : selectedCategory}</p>
+                        </div> */}
                     </TransformComponent>
                 </TransformWrapper>
             </div>
