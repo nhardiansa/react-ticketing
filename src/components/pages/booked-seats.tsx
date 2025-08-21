@@ -37,7 +37,7 @@ export default function BookedSeatsPage() {
                             <div className="flex flex-col">
                                 <div className="flex flex-row gap-2 m-4">
                                     <SelectShowBookedSeat />
-                                    <SelecCategory/>
+                                    <SelecCategory />
                                     <Button onClick={() => {
                                         setOpenDialog(true);
                                     }}>

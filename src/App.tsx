@@ -9,6 +9,7 @@ import LoginPage from './components/pages/login-page'
 import ProtectedRoute from './components/protected-route'
 import TicketsPage from './components/pages/tickets'
 import TableBookedSeatPage from './components/pages/table-booked-seats'
+import TVDisplay from './components/pages/tv-display'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
         <AuthProvider>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/tv" element={<TVDisplay />} />
             <Route path="/login" element={<LoginPage />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<DashboardPage />} />
