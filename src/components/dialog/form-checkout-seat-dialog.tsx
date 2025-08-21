@@ -21,17 +21,26 @@ export function FormCheckoutSeatDialog({ isOpen, onOpenChange }: FormCheckoutSea
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // prevent reload
 
-        // get all ticket_id from authSelectedSeats and check if they are not same
-        const ticketIds = authSelectedSeats.map(seat => seat.ticket_id);
-        const uniqueTicketIds = new Set(ticketIds);
-        if (uniqueTicketIds.size !== ticketIds.length) {
-            alert("Terdapat tiket yang sama, silakan periksa kembali.");
+        // check if there are error in authSelectedSeats
+        // like if there is no ticket_id
+        // or if there are duplicate ticket_id
+        const ticketIds = authSelectedSeats.map((seat) => seat.ticket_id);
+
+        console.log(checkForDuplicates(ticketIds));
+
+
+        if (checkForDuplicates(ticketIds)) {
+            alert("Terdapat kesalahan pada pemilihan kursi. Pastikan semua kursi memiliki ID tiket yang valid dan tidak ada duplikat.");
             return;
         }
 
         await claimBookingSeats();
         onOpenChange(false); // close dialog after submit
     };
+
+    function checkForDuplicates(array: (string | undefined)[]): boolean {
+        return new Set(array).size !== array.length
+    }
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>

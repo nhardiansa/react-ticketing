@@ -1,27 +1,28 @@
 export type Seat = {
-    id?: string;
-    position?: string | null;
-    name?: string;
-    category: string;
-    color: string;
-    show_id?: string | null;
+  id?: string;
+  position?: string | null;
+  name?: string;
+  category: string;
+  color: string;
+  show_id?: string | null;
 };
 
 export type SeatLocked = {
-    seat_id?: string;
-    admin_id?: string;
-    show_id?:string;
+  seat_id?: string;
+  admin_id?: string;
+  show_id?: string;
+  ticket_id?: string;
 };
 
 export type ResSeatLocked = {
-    status: string,
-    data:SeatLocked,
-}
+  status: string;
+  data: SeatLocked;
+};
 
 export type SeatGenerate = {
-    start: string;
-    cols: number;
-    rows: number;
-    group: string;
-    number_start: number;
+  start: string;
+  cols: number;
+  rows: number;
+  group: string;
+  number_start: number;
 };
