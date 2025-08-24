@@ -8,6 +8,7 @@ interface BookedSeatsProps {
     rows: number;
     cols: number;
     seatSize?: number;
+    // showId?: "DISCONNECT" | "RECONNECT";
 }
 
 export const BookedSeats: React.FC<BookedSeatsProps> = ({
@@ -32,7 +33,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                 wheel={{ step: 0.05 }}
                 doubleClick={{ disabled: true }}
             >
-                <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
+                <TransformComponent wrapperStyle={{ width: "100%", height: "100%", backgroundColor: `${selectedShow === "reconnect" ? '#16590E' : '#5E1010'}` }} >
                     <div
                         style={{
                             width: cols * seatSize,
@@ -79,7 +80,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             left: colIndex * seatSize,
                                             width: seatSize - 2,
                                             height: seatSize - 2,
-                                            backgroundColor: isBooked || isLocked ? "black" : isSelectedSeat ? '#758694' : seatData ? seatData.color : "white",
+                                            backgroundColor: isBooked || isLocked ? "black" : isSelectedSeat ? '#758694' : seatData ? seatData.color : "transparent",
                                             border: isSelectedSeat ? "3px solid black" : "1px solid white",
                                             boxSizing: "border-box",
                                             fontSize: 10,

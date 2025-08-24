@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import { useBookedSeats } from "@/context/BookedSeatsContext";
 import { SearchTicket } from "../search-ticket";
+import { useEffect } from "react";
 
 interface FormCheckoutSeatDialogProps {
     isOpen: boolean;
@@ -16,7 +17,7 @@ interface FormCheckoutSeatDialogProps {
 }
 
 export function FormCheckoutSeatDialog({ isOpen, onOpenChange }: FormCheckoutSeatDialogProps) {
-    const { seats, authSelectedSeats, claimBookingSeats } = useBookedSeats();
+    const { seats, authSelectedSeats, claimBookingSeats, tickets } = useBookedSeats();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // prevent reload
@@ -26,7 +27,7 @@ export function FormCheckoutSeatDialog({ isOpen, onOpenChange }: FormCheckoutSea
         // or if there are duplicate ticket_id
         const ticketIds = authSelectedSeats.map((seat) => seat.ticket_id);
 
-        console.log(checkForDuplicates(ticketIds));
+        console.log(authSelectedSeats);
 
 
         if (checkForDuplicates(ticketIds)) {
@@ -37,6 +38,10 @@ export function FormCheckoutSeatDialog({ isOpen, onOpenChange }: FormCheckoutSea
         await claimBookingSeats();
         onOpenChange(false); // close dialog after submit
     };
+
+    useEffect(() => {
+        console.log("Tickets in FormCheckoutSeatDialog:", tickets);
+    }, [tickets]);
 
     function checkForDuplicates(array: (string | undefined)[]): boolean {
         return new Set(array).size !== array.length
