@@ -2,6 +2,14 @@ import { useBookedSeats } from "@/context/BookedSeatsContext";
 import type { SocketMessage } from "@/types/socket-message";
 import { useCallback, useEffect, useRef } from "react";
 
+// Define interface for deleted seat message
+interface DeletedSeatInfo {
+    id: string;
+    deleted: boolean;
+    seat_id: string;
+    show_id: string;
+}
+
 type BookedSeatsSocketProps = {
     children: React.ReactNode;
 };
@@ -10,7 +18,7 @@ export default function BookedSeatsSocket({ children }: BookedSeatsSocketProps) 
     const baseUrl = import.meta.env.VITE_WS_BASE_URL || 'ws://127.0.0.1:3000';
     const url = `${baseUrl}/ws`;
     const ws = useRef<WebSocket | null>(null);
-    const { upsertSeatFromBookedSeat, upsertSelectedSeats } = useBookedSeats();
+    const { upsertSeatFromBookedSeat, upsertSelectedSeats, removeBookedSeat } = useBookedSeats();
 
     const handleMessage = useCallback((event: MessageEvent) => {
         try {
@@ -19,11 +27,17 @@ export default function BookedSeatsSocket({ children }: BookedSeatsSocketProps) 
                 upsertSeatFromBookedSeat(data.message);
             } else if (data.type === "seat_locked" || data.type === "seat_unlocked") {
                 upsertSelectedSeats(data.type, data.message);
+            } else if (data.type === "booked_seat_deleted") {
+                // Handle deleted seat message
+                const deleteInfo = data.message as DeletedSeatInfo;
+                if (deleteInfo.id && deleteInfo.deleted) {
+                    removeBookedSeat(deleteInfo.id);
+                }
             }
         } catch (err) {
             console.error("Error parsing WebSocket message:", err);
         }
-    }, [upsertSeatFromBookedSeat, upsertSelectedSeats]);
+    }, [upsertSeatFromBookedSeat, upsertSelectedSeats, removeBookedSeat]);
 
     useEffect(() => {
         if (ws.current) return; // ✅ Jangan reconnect
