@@ -131,31 +131,43 @@ export const BookedSeatsProvider = ({ children }: { children: React.ReactNode })
         }
     };
 
-    const removeBookedSeat = async (bookedID: string) => {
-        try {
-            await toast.promise(deleteBookedSeat(bookedID), {
-                loading: "Delete booked seat loading...",
-                success: (res) => {
-                    if (res.success === true) {
-                        setBookedSeats((prev) => {
-                            const exists = prev.find((s) => s.id === bookedID);
-                            let newSeats: BookedSeat[] = prev;
-                            if (exists) {
-                                newSeats = prev.filter((s) => s.id !== bookedID);
-                            }
-                            return newSeats;
-                        });
-                    }
-                    return res.message;
-                },
-                error: (err) => {
-                    return err?.message || "Error delete booked seat";
-                },
+    const removeBookedSeat = async (bookedID: string, isFromWS?: boolean) => {
+        if (isFromWS) {
+            setBookedSeats((prev) => {
+                const exists = prev.find((s) => s.id === bookedID);
+                let newSeats: BookedSeat[] = prev;
+                if (exists) {
+                    newSeats = prev.filter((s) => s.id !== bookedID);
+                }
+                return newSeats;
             });
+        } else {
+            try {
+                await toast.promise(deleteBookedSeat(bookedID), {
+                    loading: "Delete booked seat loading...",
+                    success: (res) => {
+                        if (res.success === true) {
+                            setBookedSeats((prev) => {
+                                const exists = prev.find((s) => s.id === bookedID);
+                                let newSeats: BookedSeat[] = prev;
+                                if (exists) {
+                                    newSeats = prev.filter((s) => s.id !== bookedID);
+                                }
+                                return newSeats;
+                            });
+                        }
+                        return res.message;
+                    },
+                    error: (err) => {
+                        return err?.message || "Error delete booked seat";
+                    },
+                });
 
-        } catch (err) {
-            toast.error(`Failed to booking seats: ${err}`);
+            } catch (err) {
+                toast.error(`Failed to booking seats: ${err}`);
+            }
         }
+
     };
 
     const upsertSeatFromBookedSeat = (seat: BookedSeat) => {

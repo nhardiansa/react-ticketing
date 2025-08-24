@@ -31,7 +31,7 @@ export default function BookedSeatsSocket({ children }: BookedSeatsSocketProps) 
                 // Handle deleted seat message
                 const deleteInfo = data.message as DeletedSeatInfo;
                 if (deleteInfo.id && deleteInfo.deleted) {
-                    removeBookedSeat(deleteInfo.id);
+                    removeBookedSeat(deleteInfo.id,true);
                 }
             }
         } catch (err) {
