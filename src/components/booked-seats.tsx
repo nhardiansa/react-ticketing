@@ -33,7 +33,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                 wheel={{ step: 0.05 }}
                 doubleClick={{ disabled: true }}
             >
-                <TransformComponent wrapperStyle={{ width: "100%", height: "100%", backgroundColor: `${selectedShow === "reconnect" ? '#16590E' : '#5E1010'}` }} >
+                <TransformComponent wrapperStyle={{ width: "100%", height: "100%", backgroundColor: `${selectedShow === "reconnect" ? '#16590E' : '#702137'}` }} >
                     <div
                         style={{
                             width: cols * seatSize,
@@ -59,8 +59,8 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             left: colIndex * seatSize,
                                             width: seatSize - 2,
                                             height: seatSize - 2,
-                                            backgroundColor: seatData ? "grey" : "white",
-                                            border: "1px solid white",
+                                            backgroundColor: seatData ? "grey" : "transparent",
+                                            border: "1px solid transparent",
                                             boxSizing: "border-box",
                                             fontSize: 10,
                                             display: "flex",
@@ -81,7 +81,7 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                                             width: seatSize - 2,
                                             height: seatSize - 2,
                                             backgroundColor: isBooked || isLocked ? "black" : isSelectedSeat ? '#758694' : seatData ? seatData.color : "transparent",
-                                            border: isSelectedSeat ? "3px solid black" : "1px solid white",
+                                            border: isSelectedSeat ? "3px solid black" : "1px solid transparent",
                                             boxSizing: "border-box",
                                             fontSize: 10,
                                             display: "flex",
@@ -110,8 +110,8 @@ export const BookedSeats: React.FC<BookedSeatsProps> = ({
                         )}
                     </div>
                     <div className="absolute top-0 left-400 bg-transparent flex flex-col items-center">
-                        <p className="font-bold text-[200px] uppercase">{selectedShow}</p>
-                        <p className="text-[150px] uppercase">{selectedCategory == 'all' ? 'Semua Category' : selectedCategory}</p>
+                        <p className="font-bold text-[200px] uppercase text-white">{selectedShow}</p>
+                        <p className="text-[150px] uppercase text-white">{selectedCategory == 'all' ? 'Semua Category' : selectedCategory}</p>
                     </div>
                     {/* <div className="absolute top-0 right-300 bg-transparent">
                             <p className="font-bold text-[200px] uppercase">{selectedShow}</p>
