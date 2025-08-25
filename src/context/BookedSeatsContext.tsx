@@ -27,7 +27,7 @@ export type BookedSeatsContextType = {
     seatCategories: string[];
     bookedSeat: BookedSeat | null;
     setBookedSeat: React.Dispatch<React.SetStateAction<BookedSeat | null>>;
-    removeBookedSeat: (bookedID: string) => void;
+    removeBookedSeat: (bookedID: string, isFromWS?: boolean) => void;
 };
 
 export const BookedSeatsContext = createContext<BookedSeatsContextType | undefined>(undefined);
