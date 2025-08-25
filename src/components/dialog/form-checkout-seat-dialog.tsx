@@ -10,6 +10,7 @@ import {
 import { useBookedSeats } from "@/context/BookedSeatsContext";
 import { SearchTicket } from "../search-ticket";
 import { useEffect } from "react";
+import { toast as sonnerToast } from "sonner";
 
 interface FormCheckoutSeatDialogProps {
     isOpen: boolean;
@@ -27,11 +28,48 @@ export function FormCheckoutSeatDialog({ isOpen, onOpenChange }: FormCheckoutSea
         // or if there are duplicate ticket_id
         const ticketIds = authSelectedSeats.map((seat) => seat.ticket_id);
 
-        console.log(authSelectedSeats);
+        console.log("Ticket IDs:", ticketIds);
+
+        // Check for undefined or empty ticket IDs
+        if (ticketIds.some(id => !id)) {
+            sonnerToast.custom(() => (
+                <div className="flex rounded-lg bg-red-400 shadow-lg ring-1 ring-black/5 w-full md:max-w-[364px] items-center p-4">
+                    <div className="flex flex-1 items-center">
+                        <div className="w-full">
+                            <p className="text-sm font-medium text-white">
+                                Terdapat kesalahan
+                            </p>
+                            <p className="mt-1 text-sm text-white">
+                                Pastikan semua kursi memiliki ID tiket yang valid.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            ), {
+                position: 'top-center',
+            })
+            return;
+        }
 
 
         if (checkForDuplicates(ticketIds)) {
-            alert("Terdapat kesalahan pada pemilihan kursi. Pastikan semua kursi memiliki ID tiket yang valid dan tidak ada duplikat.");
+            sonnerToast.custom(() => (
+                <div className="flex rounded-lg bg-red-400 shadow-lg ring-1 ring-black/5 w-full md:max-w-[364px] items-center p-4">
+                    <div className="flex flex-1 items-center">
+                        <div className="w-full">
+                            <p className="text-sm font-medium text-white">
+                                Terdapat kesalahan
+                            </p>
+                            <p className="mt-1 text-sm text-white">
+                                Pastikan tidak ada ID tiket yang duplikat.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            ), {
+                position: 'top-center',
+            }
+            )
             return;
         }
 
