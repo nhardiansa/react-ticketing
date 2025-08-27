@@ -5,7 +5,7 @@ import { SelectShowBookedSeat } from "../select-show-booked-seat";
 import { CELL_SIZE, COLS, ROWS } from "@/config/config";
 import { CarouselImages } from "../carousel-images";
 import { SelecCategory } from "../select-category";
-import { Button } from "../ui/button";
+// import { Button } from "../ui/button";
 
 const HomePage = () => {
     return (
@@ -34,7 +34,8 @@ function GRID() {
                 {`Pilihan Kursi`}
             </h1>
             <div className="wrapper flex justify-between items-center gap-x-4">
-                <SelecCategory /> <Button variant="default" className="cursor-pointer">Refresh</Button>
+                <SelecCategory />
+                {/* <Button variant="default" className="cursor-pointer">Refresh</Button> */}
             </div>
             {/* <BookedSeatsSocket> */}
             <div className="w-full h-100 overflow-auto relative">
