@@ -34,7 +34,8 @@ function GRID() {
                 {`Pilihan Kursi`}
             </h1>
             <div className="wrapper flex justify-between items-center gap-x-4">
-                <SelecCategory /> <Button variant="default" className="cursor-pointer">Refresh</Button>
+                <SelecCategory />
+                {/* <Button variant="default" className="cursor-pointer">Refresh</Button> */}
             </div>
             {/* <BookedSeatsSocket> */}
             <div className="w-full h-100 overflow-auto relative">
