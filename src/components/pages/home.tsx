@@ -1,8 +1,8 @@
 import { useBookedSeats } from "@/context/BookedSeatsContext";
 import { BookedSeatsProvider } from "@/context/BookedSeatsProvider";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+// import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import { SelectShowBookedSeat } from "../select-show-booked-seat";
-import { CELL_SIZE, COLS, ROWS } from "@/config/config";
+// import { CELL_SIZE, COLS, ROWS } from "@/config/config";
 import { CarouselImages } from "../carousel-images";
 import { SelecCategory } from "../select-category";
 // import { Button } from "../ui/button";
@@ -18,7 +18,8 @@ const HomePage = () => {
 export default HomePage;
 
 function GRID() {
-    const { seats, bookedSeats, selectedShow, selectedCategory, anotherAuthSelectedSeats } = useBookedSeats();
+    // const { seats, bookedSeats, selectedShow, selectedCategory, anotherAuthSelectedSeats } = useBookedSeats();
+    const { selectedShow, } = useBookedSeats();
 
     return (
         <div className="flex flex-col items-center gap-2">
@@ -38,7 +39,7 @@ function GRID() {
                 {/* <Button variant="default" className="cursor-pointer">Refresh</Button> */}
             </div>
             {/* <BookedSeatsSocket> */}
-            <div className="w-full h-100 overflow-auto relative">
+            {/* <div className="w-full h-100 overflow-auto relative">
                 <TransformWrapper
                     minScale={0.1}
                     initialScale={0.1}
@@ -117,13 +118,9 @@ function GRID() {
                             <p className="font-bold text-[200px] uppercase">{selectedShow}</p>
                             <p className="text-[150px] uppercase">{selectedCategory == 'all' ? 'Semua Category' : selectedCategory}</p>
                         </div>
-                        {/* <div className="absolute top-0 right-300 bg-transparent">
-                            <p className="font-bold text-[200px] uppercase">{selectedShow}</p>
-                            <p className="text-[150px] uppercase">{selectedCategory == 'all' ? 'Semua Category' : selectedCategory}</p>
-                        </div> */}
                     </TransformComponent>
                 </TransformWrapper>
-            </div>
+            </div> */}
             {/* </BookedSeatsSocket> */}
         </div>
     );
